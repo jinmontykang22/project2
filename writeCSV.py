@@ -45,11 +45,11 @@ for day in days:
     item, cost = random.choice(menu) #picks random item from 'menu', item
     numItems = random.randint(1,3)
 
-    if numItems != 1: # randomly generates multiple items per order
-        for i in range(numItems - 1):
-            item2, cost2 = random.choice(menu)
-            item = item + ", " + item2
-            cost += cost2
+    for i in range(numItems - 1):
+        item2, cost2 = random.choice(menu)
+        # If the items inside of the 
+        item = item + " + " + item2
+        cost += cost2
 
     order = [
         orderID,
