@@ -1,8 +1,21 @@
 import csv
 import random
+import datetime as d
+
 # from faker import Faker #you 'pip install faker' in the project2 directory. you actually probably don't need this
 # this file writes entries to a CSV. 
 # I think this will be useful to later examine in Excel before copying it to the SQL db
+
+
+
+def iterate_days_in_year(year):
+    weeks = 39
+    start_date = d.date(year, 1, 1)
+    current_date = start_date
+    while (current_date - start_date).total_seconds() <= weeks * 7 * 24 * 60 * 60:
+        yield current_date
+        current_date += d.timedelta(days=1)
+
 
 # goals to meet. the loop to populate 'data' will probably be a while loop based on these 2 conditions being met
 revenueGoal = 750000
@@ -18,11 +31,10 @@ menu = [
 # this loop populates 'data', a list of lists (each list is an order)
 data = []
 totalCost = 0
-
 orderID = 1
+days = [day for day in iterate_days_in_year(2024)]
 
-
-while totalCost < 600:
+for day in days:
     hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
     min = random.randint(0, 59)
     time = f"{hour:02d}:{min:02d}" # time
@@ -42,7 +54,7 @@ while totalCost < 600:
     order = [
         orderID,
         "Complete", #do we really need status as an Attribute? in the case of seeding the db, we wouldn't input a "Incomplete/Cancelled" order
-        "placeHolderDate",
+        day,
         time,
         cost,
         item,
@@ -51,8 +63,6 @@ while totalCost < 600:
     data.append(order)
     orderID += 1
     totalCost += cost
-
-
 
 with open('testCSV2.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
