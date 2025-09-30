@@ -1,12 +1,31 @@
 import csv
 import random
 import datetime as d
+from faker import Faker
 
 """
-* This will create several files. products.csv which is the menu, each item constructed from various ingredients
+Run this and you will see several files in the tables dir.
+
+1) ingredients.csv which holds the tea mixes that would be used to make various teas. This can be edited to add
+new items like boba beads that you would then add to the menu item in products by changing one of the flavors to
+the new ingredient key.
+
+2) inventory.csv which shows a list of the inventory items that our business is keeping track of and the stock
+of units remaining on each item. This can potentially be merged with ingredients, but it didnt make immediate
+sense to try so I did not.
+
+3) items.csv will hold the list of every single item ordered by a customer throughout all orders. It has keys
+to the product table for the individual product it represents, keys to the order table for the order it is part
+of, etc. It also contains a few entries dedicated to size, ice, and more each with a few possible values.
+
+4) products.csv which is the menu basically, each item constructed from various ingredients
 but independent from size, and obvious customizable options. The ingredients arent for the customer to see, but
 the staff. The price is essentially made up, and will be displayed to the customer along with the name of the 
 product.
+
+5) staff.csv created by Aaron, can be extended but I have not gotten to that point yet.
+
+Goodnight pals.
 """
 revenueGoal = 750000
 weekGoal = 39
@@ -20,7 +39,36 @@ def iterate_days_in_year(year):
         current_date += d.timedelta(days=1)
 
 
+"""
+This is writeStaff.py, credit: Aaron Liu
+"""
+fake = Faker()
 
+roles = {
+    'Manager': (80000, 90000),
+    'Cashier': (28000, 35000),
+    'Barista': (27000, 32000),
+    'Cook': (30000, 36000),
+    'Cleaner': (24000, 28000)
+}
+
+staff_data = [['Name', 'ID', 'Role', 'Salary', 'Hours']]
+
+for i in range(1, 11): 
+    name = fake.name()
+    staff_id = f"S{str(i).zfill(3)}"
+    role = random.choice(list(roles.keys()))
+    salary = random.randint(*roles[role])
+    hours = random.randint(20, 40)
+    
+    staff_data.append([name, staff_id, role, salary, hours])
+
+with open('tables/staff.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerows(staff_data)
+"""
+End
+"""
 
 products = [
     (1, "Classic Milk Tea"      , 6.99, 'cold', '1'    , '17'     , '17'      , '0.50'    , '1', '1'), # 1 for 1 scoop
@@ -67,31 +115,33 @@ with open('tables/products.csv', 'w') as productFile:
 """
 Writing ingredients file.
 """
+
+teas = [
+    "Water"         ,
+    "Black Mix"     ,
+    "Apple Mix"     ,
+    "Peach Mix"     ,
+    "Lemon Mix"     ,
+    "Green Mix"     ,
+    "Rasberry Mix"  ,
+    "Orange Mix"    ,
+    "Matcha Mix"    ,
+    "Camamile Mix"  ,
+    "Peppermint Mix",
+    "Honey Mix"     ,
+    "Ulong Mix"     ,
+    "Rooibos Mix"   ,
+    "Caremel Mix"   ,
+    "Chocolate Mix" ,
+    "Cherry Mix"    ,
+    "null"
+]
+
 with open('tables/ingredients.csv', 'w') as ingred:
     
     writer = csv.writer(ingred)
-    writer.writerow(['Tea Mix ID'       , 'Tea Name'])
+    writer.writerow(['Mix ID'       , 'Tea Name'])
 
-    teas = [
-        "Water"         ,
-        "Black Mix"     ,
-        "Apple Mix"     ,
-        "Peach Mix"     ,
-        "Lemon Mix"     ,
-        "Green Mix"     ,
-        "Rasberry Mix"  ,
-        "Orange Mix"    ,
-        "Matcha Mix"    ,
-        "Camamile Mix"  ,
-        "Peppermint Mix",
-        "Honey Mix"     ,
-        "Ulong Mix"     ,
-        "Rooibos Mix"   ,
-        "Caremel Mix"   ,
-        "Chocolate Mix" ,
-        "Cherry Mix"    ,
-        "null"
-    ]
 
     for i, tea in enumerate(teas):
         teas[i] = (i, tea)
@@ -100,75 +150,117 @@ with open('tables/ingredients.csv', 'w') as ingred:
 
 
 """
+Writing Inventory file.
+"""
+with open('tables/inventory.csv', 'w') as inventoryFile:
+    
+    writer = csv.writer(inventoryFile)
+    writer.writerow(['Inv Item ID', 'Name', 'Units Remaining'])
+
+    inventory = [
+        (1, 'Paper Towels', 30),
+        (2, 'Napkins', 45),
+        (3, 'Straws', 40),
+        (4, 'Small Cups', 10),
+        (5, 'Medium Cups', 3),
+        (6, 'Large Cups', 15),
+        (7, 'Lids', 10),
+        (8, 'Toilet Paper', 21),
+        (9, 'Soap', 15)
+    ]
+
+    writer.writerows(inventory)
+
+
+"""
 Writing Orders table and Items table
 """
+# Printing purposes
+totalRevenue = 0
+peakDays = 0
+
+
 days = [day for day in iterate_days_in_year(2024)]
 sizes = ['Small', 'Medium', 'Large', 'Bucees Large']
 sugar_or_ice = ['0', '50', '75', '100']
-totalRevenue = 0
+orders  = []
+items   = []
 orderID = 1
 
 ordersTable     = open('tables/orders.csv', 'w')
 itemsTable      = open('tables/items.csv', 'w')
-orders  = []
-items   = []
-for day in days:
-    hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
-    min = random.randint(0, 59)
-    time = f"{hour:02d}:{min:02d}" # time    
-    
-    numItems = random.randint(1,4)
-    totalPrice = 0
-    orderItemNumber = 1 
-    # This will be an extension to the orderID, like rooms are to floors,
-    # the first item of the first order will have itemID = 11, second ID = 12
-    for i in range(numItems):
-        prd = random.choice(products)
-        productID = prd[0]
-        itemID = str(orderID) + ' ' + str(orderItemNumber)
-        size = random.choice(sizes)
-        sugar = random.choice(sugar_or_ice)
-        ice = random.choice(sugar_or_ice)
-        extra_milk = random.randint(0,1)
-        # Charge for milk added on
-        if extra_milk:
-            totalPrice += 0.5 
-        milk = 'Milk' if extra_milk else 'No Milk'
 
-        item = [
+for day_count, day in enumerate(days):   
+    # CHANGE THESE NUMBERS TO INCREASE OR DECREASE THE TOTAL REVENUE, TOTAL ORDERS, etc.
+    maxRange = 140
+    minRange = 90
+    peakDayThreshold = 160
+    factor = 1
+    # First month of the semester
+    if str(day).split('-')[1] == '09':
+        factor += 0.2
+    if (day_count % 7 in (0,1)):
+        factor += 0.2
+        
+    numOrders = random.randint(int(minRange*factor), int(maxRange*factor))
+    peakDays += 1 if numOrders >= peakDayThreshold else 0
+    for _ in range(numOrders):
+        hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
+        min = random.randint(0, 59)
+        time = f"{hour:02d}:{min:02d}" # time 
+        numItems = random.randint(1, 5)
+        totalPrice = 0
+        orderItemNumber = 1 
+        # This will be an extension to the orderID, like rooms are to floors,
+        # the first item of the first order will have itemID = 11, second ID = 12
+        for _ in range(numItems):
+            prd = random.choice(products)
+            productID = prd[0]
+            itemID = str(orderID) + ' ' + str(orderItemNumber)
+            size = random.choice(sizes)
+            sugar = random.choice(sugar_or_ice)
+            ice = random.choice(sugar_or_ice)
+            extra_milk = random.randint(0,1)
+            # Charge for milk added on
+            if extra_milk:
+                totalPrice += 0.5 
+            milk = 'Milk' if extra_milk else 'No Milk'
+
+            item = [
+                orderID,
+                productID,
+                itemID,
+                size,
+                sugar,
+                ice,
+                extra_milk
+            ]
+
+            totalPrice += prd[2]
+            items.append(item)
+
+        order = [
             orderID,
-            productID,
-            itemID,
-            size,
-            sugar,
-            ice,
-            extra_milk
+            day,
+            time,
+            totalPrice,
         ]
-
-        totalPrice += prd[2]
-        items.append(item)
-
-    order = [
-        orderID,
-        day,
-        time,
-        totalPrice
-    ]
-    orderID += 1
-    totalRevenue += totalPrice
-    orders.append(order)
+        orderID += 1
+        totalRevenue += totalPrice
+        orders.append(order)
 
 writer = csv.writer(itemsTable)
 writer.writerow(['Order ID', 'Product ID', 'Item ID', 'Size', 'Sugar', 'Ice', 'Extra Milk'])
 writer.writerows(items)
 
 writer = csv.writer(ordersTable)
-writer.writerow(['Order ID', 'Day', 'Time', 'Total Price'])
+writer.writerow(['Order ID', 'Day', 'Time', 'Price'])
 writer.writerows(orders)
 
 ordersTable.close()
 itemsTable.close()
 
+print(f'TOTAL REVENUE: {totalRevenue:.02f}\nTOTAL WEEKS: 39\nTOTAL ORDERS: {len(orders)}\nTOTAL ITEMS ORDERED: {len(items)}\nPEAK DAYS: {peakDays}')
 
 
 """ POSSIBLE SCHEME

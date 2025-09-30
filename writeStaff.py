@@ -23,7 +23,7 @@ for i in range(1, 11):
     
     staff_data.append([name, staff_id, role, salary, hours])
 
-with open('staff.csv', mode='w', newline='') as file:
+with open('tables/staff.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(staff_data)
 

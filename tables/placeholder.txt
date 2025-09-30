@@ -1,0 +1,3 @@
+This will hopefully make it so that when committing, the 'tables' folder remains.
+The files that will be output to this folder are in .gitignore, so they shouldnt
+be tracked with commits, but this individual file is.
