@@ -137,4 +137,6 @@ CREATE TABLE order_items (
     FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE RESTRICT
 );
 
+-- 
+
 """
