@@ -2,66 +2,116 @@ import csv
 import random
 import datetime as d
 
-# from faker import Faker #you 'pip install faker' in the project2 directory. you actually probably don't need this
-# this file writes entries to a CSV. 
-# I think this will be useful to later examine in Excel before copying it to the SQL db
-
-
+"""
+* This will create several files. products.csv which is the menu, each item constructed from various ingredients
+but independent from size, and obvious customizable options. The ingredients arent for the customer to see, but
+the staff. The price is essentially made up, and will be displayed to the customer along with the name of the 
+product.
+"""
+revenueGoal = 750000
+weekGoal = 39
 
 def iterate_days_in_year(year):
-    weeks = 39
+    weekGoal = 39
     start_date = d.date(year, 1, 1)
     current_date = start_date
-    while (current_date - start_date).total_seconds() <= weeks * 7 * 24 * 60 * 60:
+    while (current_date - start_date).total_seconds() <= weekGoal * 7 * 24 * 60 * 60:
         yield current_date
         current_date += d.timedelta(days=1)
 
 
-# goals to meet. the loop to populate 'data' will probably be a while loop based on these 2 conditions being met
-revenueGoal = 750000
-weekGoal = 39
 
-menu = [
-    ("Classic Milk Tea", 6.99), #each item (for now) is a tuple: pair of name + price
-    ("Apple Tea", 7.49),
-    ("Peach Tea", 7.99),
-    ("Lemon Tea", 6.99),
-    ("Green Tea", 6.99),
-    ("Rasberry Tea", 7.99),
-    ("Matcha Tea", 7.99),
-    ("Orange Tea", 7.49),
-    ("Boba Tea", 7.49),
-    ("Camamile Tea", 7.99),
-    ("Earl Grey Tea", 7.99),
-    ("Taro Tea", 7.99),
-    ("Ulong Tea", 7.99),
-    ("Peppermint Tea", 7.49),
-    ("Black Tea", 7.99),
-    ("Rooibos Tea", 7.99),
-    ("Apricot Amaretto Tea", 7.49),
-    ("Belgian Mint Tea", 7.99),
-    ("Caremel Nougat Tea", 7.99),
-    ("Cherry Cosmo Tea", 7.99),
-    ("Chocolate Fondue Tea", 7.99),
-    ("Darjeelinge Quince Tea", 7.49),
-    ("Hibiscus Blossom Tea", 7.99),
-    ("Honey Hojicha Tea", 7.99)
+
+products = [
+    (1, "Classic Milk Tea"      , 6.99, 'cold', '1'    , '17'     , '17'      , '0.50'    , '1', '1'), # 1 for 1 scoop
+    (2, "Apple Tea"             , 7.49, 'hot' , '2'    , '5'      , '17'      , '0.25'    , '0', '2'),
+    (3, "Peach Tea"             , 7.99, 'cold', '3'    , '5'      , '17'      , '0.25'    , '0', '2'),
+    (4, "Lemon Tea"             , 6.99, 'cold', '4'    , '4'      , '17'      , '0.00'    , '0', '2'),
+    (5, "Green Tea"             , 6.99, 'cold', '5'    , '5'      , '17'      , '0.00'    , '0', '0'),
+    (6, "Rasberry Tea"          , 7.99, 'cold', '6'    , '17'     , '17'      , '0.00'    , '0', '2'),
+    (7, "Matcha Tea"            , 7.49, 'cold', '8'    , '17'     , '17'      , '0.00'    , '1', '0'),
+    (8, "Orange Tea"            , 6.99, 'cold', '7'    , '17'     , '17'      , '0.00'    , '1', '0'),
+    (9, "Boba Tea"              , 7.49, 'cold', '3'    , '5'      , '17'      , '0.50'    , '1', '0'),
+    (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '17'     , '17'      , '0.25'    , '0', '0'),
+    (11, "Earl Grey Tea"        , 7.99, 'hot' , '1'    , '9'      , '17'      , '0.00'    , '0', '0'),
+    (12, "Taro Tea"             , 6.99, 'hot' , '10'   , '11'     , '17'      , '0.50'    , '0', '0'),
+    (13, "Ulong Tea"            , 7.99, 'hot' , '12'   , '17'     , '17'      , '0.00'    , '0', '0'),
+    (14, "Peppermint Tea"       , 7.49, 'hot' , '10'   , '1'      , '17'      , '0.00'    , '2', '1'),
+    (15, "Black Tea"            , 7.99, 'hot' , '1'    , '17'     , '17'      , '0.00'    , '0', '0'),
+    (16, "Rooibos Tea"          , 7.99, 'hot' , '1'    , '5'      , '10'      , '0.00'    , '1', '1'),
+    (17, "Apricot Amaretto Tea" , 7.49, 'hot' , '15'   , '14'     , '10'      , '0.00'    , '0', '0'),
+    (18, "Belgian Mint Tea"     , 7.99, 'cold', '10'   , '6'      , '17'      , '0.00'    , '1', '1'),
+    (19, "Caremel Nougat Tea"   , 7.99, 'hot' , '14'   , '1'      , '15'      , '0.25'    , '1', '0'),
+    (20, "Cherry Cosmo Tea"     , 7.99, 'cold', '16'   , '9'      , '14'      , '0.00'    , '0', '1'),
+    (21, "Chocolate Fondue Tea" , 7.99, 'hot' , '15'   , '11'     , '17'      , '0.50'    , '1', '0'),
+    (22, "Darjelinge Quince Tea", 7.49, 'cold', '8'    , '9'      , '17'      , '0.00'    , '1', '1'),
+    (23, "Hibiscus Blossom Tea" , 7.99, 'hot' , '10'   , '9'      , '17'      , '0.00'    , '1', '1'),
+    (24, "Honey Hojicha Tea"    , 7.99, 'cold', '11'   , '5'      , '12'      , '0.00'    , '1', '1'),
+    (25, "CUSTOM TEA"           , 7.99, 'cold', '17'   , '17'     , '17'      , '0.00'    , '0', '0'), 
+    # Default values for the custom tea, the staff wll construct this on their own if necessary, but 
+    # will be instructed to do so infrequently.
 ]
+
+"""
+Writing Products File
+"""
+with open('tables/products.csv', 'w') as productFile:
+    writer = csv.writer(productFile)
+    writer.writerow(['Product ID'       , 'Product Name'    , 'Price'           ,
+                     'Temperature'      , 'Flavor'          , 'Flavor 2'        , 
+                     'Flavor 3'         , 'Milk'            , 'Cream'           ,
+                     'Sugar'     ])
+    
+    writer.writerows(products)
+
+"""
+Writing ingredients file.
+"""
+with open('tables/ingredients.csv', 'w') as ingred:
+    
+    writer = csv.writer(ingred)
+    writer.writerow(['Tea Mix ID'       , 'Tea Name'])
+
+    teas = [
+        "Water"         ,
+        "Black Mix"     ,
+        "Apple Mix"     ,
+        "Peach Mix"     ,
+        "Lemon Mix"     ,
+        "Green Mix"     ,
+        "Rasberry Mix"  ,
+        "Orange Mix"    ,
+        "Matcha Mix"    ,
+        "Camamile Mix"  ,
+        "Peppermint Mix",
+        "Honey Mix"     ,
+        "Ulong Mix"     ,
+        "Rooibos Mix"   ,
+        "Caremel Mix"   ,
+        "Chocolate Mix" ,
+        "Cherry Mix"    ,
+        "null"
+    ]
+
+    for i, tea in enumerate(teas):
+        teas[i] = (i, tea)
+
+    writer.writerows(teas)
+
+
+"""
+Writing Orders table and Items table
+"""
+days = [day for day in iterate_days_in_year(2024)]
 sizes = ['Small', 'Medium', 'Large', 'Bucees Large']
 sugar_or_ice = ['0', '50', '75', '100']
-
-
-data = []
 totalRevenue = 0
 orderID = 1
 
-
-days = [day for day in iterate_days_in_year(2024)]
-
-ordersTable     = open('orders.csv', 'w')
-itemsTable      = open('items.csv', 'w')
-productsTable   = open('products.csv', 'w')
-
+ordersTable     = open('tables/orders.csv', 'w')
+itemsTable      = open('tables/items.csv', 'w')
+orders  = []
+items   = []
 for day in days:
     hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
     min = random.randint(0, 59)
@@ -69,29 +119,34 @@ for day in days:
     
     numItems = random.randint(1,4)
     totalPrice = 0
-    orderItemNumber = 1
+    orderItemNumber = 1 
+    # This will be an extension to the orderID, like rooms are to floors,
+    # the first item of the first order will have itemID = 11, second ID = 12
     for i in range(numItems):
-        itemID = str(orderID) + ' ' + orderItemNumber
-        item, price = random.choice(menu)
+        prd = random.choice(products)
+        productID = prd[0]
+        itemID = str(orderID) + ' ' + str(orderItemNumber)
         size = random.choice(sizes)
         sugar = random.choice(sugar_or_ice)
         ice = random.choice(sugar_or_ice)
-        milk = random.randint(0,1)
+        extra_milk = random.randint(0,1)
         # Charge for milk added on
-        if milk:
+        if extra_milk:
             totalPrice += 0.5 
-        milk = 'Milk' if milk else 'No Milk'
-
-        totalPrice += price
+        milk = 'Milk' if extra_milk else 'No Milk'
 
         item = [
             orderID,
+            productID,
             itemID,
             size,
             sugar,
             ice,
-            milk
+            extra_milk
         ]
+
+        totalPrice += prd[2]
+        items.append(item)
 
     order = [
         orderID,
@@ -99,14 +154,20 @@ for day in days:
         time,
         totalPrice
     ]
-    writer = csv.writer(ordersTable)
-    writer.writerow(order)
     orderID += 1
-    totalRevenue += cost
+    totalRevenue += totalPrice
+    orders.append(order)
+
+writer = csv.writer(itemsTable)
+writer.writerow(['Order ID', 'Product ID', 'Item ID', 'Size', 'Sugar', 'Ice', 'Extra Milk'])
+writer.writerows(items)
+
+writer = csv.writer(ordersTable)
+writer.writerow(['Order ID', 'Day', 'Time', 'Total Price'])
+writer.writerows(orders)
 
 ordersTable.close()
 itemsTable.close()
-productsTable.close()
 
 
 
