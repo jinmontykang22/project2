@@ -47,13 +47,15 @@ menu = [
     ("Hibiscus Blossom Tea", 7.99),
     ("Honey Hojicha Tea", 7.99)
 ]
-size = ['Small', 'Medium', 'Large', 'Bucees Large']
+sizes = ['Small', 'Medium', 'Large', 'Bucees Large']
+sugar_or_ice = ['0', '50', '75', '100']
 
 
-# this loop populates 'data', a list of lists (each list is an order)
 data = []
 totalRevenue = 0
 orderID = 1
+
+
 days = [day for day in iterate_days_in_year(2024)]
 
 ordersTable     = open('orders.csv', 'w')
@@ -63,25 +65,32 @@ productsTable   = open('products.csv', 'w')
 for day in days:
     hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
     min = random.randint(0, 59)
-    time = f"{hour:02d}:{min:02d}" # time
-
-    #need to generate random date 39 weeks from now
-    
+    time = f"{hour:02d}:{min:02d}" # time    
     
     numItems = random.randint(1,4)
     totalPrice = 0
+    orderItemNumber = 1
     for i in range(numItems):
+        itemID = str(orderID) + ' ' + orderItemNumber
         item, price = random.choice(menu)
+        size = random.choice(sizes)
+        sugar = random.choice(sugar_or_ice)
+        ice = random.choice(sugar_or_ice)
+        milk = random.randint(0,1)
+        # Charge for milk added on
+        if milk:
+            totalPrice += 0.5 
+        milk = 'Milk' if milk else 'No Milk'
 
         totalPrice += price
-
 
         item = [
             orderID,
             itemID,
             size,
             sugar,
-            ice
+            ice,
+            milk
         ]
 
     order = [
