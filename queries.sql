@@ -1,35 +1,29 @@
--- grabs the orders from a specific time frame
-SELECT * FROM entries WHERE order_date BETWEEN 'start_date_here' AND 'end_date_here';
+-- grabs the orders from a specific time frame and sort them
+SELECT * FROM Orders WHERE day BETWEEN '2025-01-01' AND '2025-01-01' AND time BETWEEN '10:00:00' AND '15:00:00' ORDER BY day DESC, time DESC;
 
--- grabs all product_categories
-SELECT DISTINCT category FROM Products;
+-- grabs all hot beverages
+SELECT * FROM Products WHERE temperature = 'hot';
 
 -- grabs all products without milk in it
-SELECT p.*
-FROM products p
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM product_ingredients pi
-    JOIN ingredients i ON pi.ingredient_id = i.id
-    WHERE pi.product_id = p.id
-      AND i.name = 'milk'
-);
-
+SELECT * FROM products WHERE milk = 0;
 
 -- grabs the most recent order
-SELECT * FROM Orders ORDER BY order_id DESC LIMIT 1;
+SELECT * FROM Orders ORDER BY day DESC, time DESC LIMIT 1;
 
 -- calculates the sum of the revenue of the day
-SELECT SUM(total_price) FROM Orders WHERE order_date = 'insert_date_here';
+SELECT SUM(price) FROM Orders WHERE day = '2025-01-01';
 
--- grabs all active products in an category
-select * FROM products WHERE category = 'insert_category_here' AND is_active = true;
+-- grabs all products with no sugar
+SELECT * FROM products WHERE sugar = 0;
 
--- grabs all inactive products
-SELECT * FROM products WHERE is_active = false;
+-- grabs all nonmanagers from staff
+SELECT * FROM staff WHERE role != 'Manager';
+
+-- grabs all out of stock inventory items
+SELECT name FROM inventory WHERE units_remaining = 0;
 
 -- grabs all out of stock ingredients
-SELECT * FROM ingredients WHERE quantity_in_stock = 0;
+SELECT ing_name FROM ingredients WHERE numservings = 0;
 
--- calculates the sum of all the tips for the day
-SELECT SUM(tip) FROM Orders WHERE order_date = 'insert_date_here';
+-- calculates yearly employment costs
+SELECT SUM(salary) FROM staff;
