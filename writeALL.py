@@ -1,6 +1,6 @@
 import csv
 import random
-import datetime as d
+from datetime import date, datetime, timedelta
 from faker import Faker
 
 """
@@ -30,13 +30,13 @@ Goodnight pals.
 revenueGoal = 750000
 weekGoal = 39
 
-def iterate_days_in_year(year):
-    weekGoal = 39
-    start_date = d.date(year, 1, 1)
-    current_date = start_date
-    while (current_date - start_date).total_seconds() <= weekGoal * 7 * 24 * 60 * 60:
-        yield current_date
-        current_date += d.timedelta(days=1)
+# def iterate_days_in_year(year):
+#     weekGoal = 39
+#     start_date = d.date(year, 1, 1)
+#     current_date = start_date
+#     while (current_date - start_date).total_seconds() <= weekGoal * 7 * 24 * 60 * 60:
+#         yield current_date
+#         current_date += d.timedelta(days=1)
 
 
 """
@@ -48,7 +48,7 @@ roles = {
     'Manager': (80000, 90000),
     'Cashier': (28000, 35000),
     'Barista': (27000, 32000),
-    'Cook': (30000, 36000),
+    'Cook': (30000, 36000), #does this even apply here?
     'Cleaner': (24000, 28000)
 }
 
@@ -57,7 +57,7 @@ staff_data = [['Name', 'ID', 'Role', 'Salary', 'Hours']]
 for i in range(1, 11): 
     name = fake.name()
     staff_id = f"S{str(i).zfill(3)}"
-    role = random.choice(list(roles.keys()))
+    role = random.choice(list(roles.keys())) #might want to add forced amount of certain roles (at least 1 manager, 1 cashier, etc)
     salary = random.randint(*roles[role])
     hours = random.randint(20, 40)
     
@@ -103,11 +103,11 @@ products = [
 """
 Writing Products File
 """
-with open('tables/products.csv', 'w') as productFile:
+with open('tables/products.csv', 'w', newline='') as productFile:
     writer = csv.writer(productFile)
-    writer.writerow(['Product ID'       , 'Product Name'    , 'Price'           ,
-                     'Temperature'      , 'Flavor'          , 'Flavor 2'        , 
-                     'Flavor 3'         , 'Milk'            , 'Cream'           ,
+    writer.writerow(['Product_ID'       , 'Product_Name'    , 'Price'           ,
+                     'Temperature'      , 'Flavor'          , 'Flavor_2'        , 
+                     'Flavor_3'         , 'Milk'            , 'Cream'           ,
                      'Sugar'     ])
     
     writer.writerows(products)
@@ -137,10 +137,10 @@ teas = [
     "null"
 ]
 
-with open('tables/ingredients.csv', 'w') as ingred:
+with open('tables/ingredients.csv', 'w', newline='') as ingred:
     
     writer = csv.writer(ingred)
-    writer.writerow(['Mix ID'       , 'Tea Name'])
+    writer.writerow(['Mix_ID'       , 'Tea_Name'])
 
 
     for i, tea in enumerate(teas):
@@ -152,10 +152,10 @@ with open('tables/ingredients.csv', 'w') as ingred:
 """
 Writing Inventory file.
 """
-with open('tables/inventory.csv', 'w') as inventoryFile:
+with open('tables/inventory.csv', 'w', newline='') as inventoryFile:
     
     writer = csv.writer(inventoryFile)
-    writer.writerow(['Inv Item ID', 'Name', 'Units Remaining'])
+    writer.writerow(['Inv_Item_ID', 'Name', 'Units_Remaining'])
 
     inventory = [
         (1, 'Paper Towels', 30),
@@ -179,30 +179,53 @@ Writing Orders table and Items table
 totalRevenue = 0
 peakDays = 0
 
+# holidays list for peakDay logic. expand as needed/wanted
+holidays = [
+    (1, 1),    # New Year's Day
+    (7, 4),    # Independence Day
+    (11, 27),  # Thanksgiving (apparently isn't always 27th but whatever)
+    (12, 25)   # Christmas!
+]
 
-days = [day for day in iterate_days_in_year(2024)]
-sizes = ['Small', 'Medium', 'Large', 'Bucees Large']
-sugar_or_ice = ['0', '50', '75', '100']
+# I don't agree with this day logic. the description states 39 weeks from today, but this assumes 39 weeks in 'x' year, starting from the 1st day of that year.
+# i argue that this method of calculating date is more flexible than being restricted to a specific year. 
 orders  = []
+startDate = datetime.now() - timedelta(weeks=weekGoal) 
+endDate = datetime.now()
+currentDate = startDate
+
+# days = [day for day in iterate_days_in_year(2024)] 
+sizes = ['Small', 'Medium', 'Large', 'Bucees_Large']
+sugar_or_ice = ['0', '50', '75', '100']
+
 items   = []
 orderID = 1
 
-ordersTable     = open('tables/orders.csv', 'w')
-itemsTable      = open('tables/items.csv', 'w')
+ordersTable     = open('tables/orders.csv', 'w', newline='') #using newline just to be safe. 
+itemsTable      = open('tables/items.csv', 'w', newline='')
 
-for day_count, day in enumerate(days):   
+# i think that the loop considering both conditions is more natural. it guarantees both conditions are met. 
+# previously, it considered only the number of weeks, and math was probably done to ensure the revenue was 
+# met by price/numItems/numOrders. maybe either way is fine. 
+while (totalRevenue < revenueGoal or currentDate <= endDate):
     # CHANGE THESE NUMBERS TO INCREASE OR DECREASE THE TOTAL REVENUE, TOTAL ORDERS, etc.
-    maxRange = 140
-    minRange = 90
-    peakDayThreshold = 160
-    factor = 1
-    # First month of the semester
-    if str(day).split('-')[1] == '09':
-        factor += 0.2
-    if (day_count % 7 in (0,1)):
-        factor += 0.2
+    maxRange = 150
+    minRange = 100
+    peakDayThreshold = 170
+    # factor = 1
+
+    # SET UP PEAK DAY LOGIC
+    peakDay = datetime(2025, 8, 25) # for now, peak day will be 8/25/2025 (first day of school)
         
-    numOrders = random.randint(int(minRange*factor), int(maxRange*factor))
+    numOrders = random.randint(minRange, maxRange)
+
+    if currentDate.date() == peakDay.date():
+        numOrders = numOrders * 2 #double the 'numOrders' on this specific day
+    if currentDate.weekday() >= 5:
+        numOrders = int(numOrders * 1.1) #weekends boost by 10%
+    if (currentDate.month, currentDate.day) in holidays:
+        numOrders = int(numOrders * 1.2) #holidays boost by 20%
+
     peakDays += 1 if numOrders >= peakDayThreshold else 0
     for _ in range(numOrders):
         hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
@@ -216,15 +239,15 @@ for day_count, day in enumerate(days):
         for _ in range(numItems):
             prd = random.choice(products)
             productID = prd[0]
-            itemID = str(orderID) + ' ' + str(orderItemNumber)
-            size = random.choice(sizes)
+            itemID = str(orderID) + ' ' + str(orderItemNumber) # is itemID going to be a primary key? it may be difficult to read/search in current format (maybe '_' or '.' instead of space)
+            size = random.choice(sizes) #should size affect price? what does the price in products represent (the standard drink)? is medium the assumption?
             sugar = random.choice(sugar_or_ice)
             ice = random.choice(sugar_or_ice)
             extra_milk = random.randint(0,1)
             # Charge for milk added on
             if extra_milk:
                 totalPrice += 0.5 
-            milk = 'Milk' if extra_milk else 'No Milk'
+            # milk = 'Milk' if extra_milk else 'No Milk' #doesn't seem like it's ('milk') used
 
             item = [
                 orderID,
@@ -237,11 +260,12 @@ for day_count, day in enumerate(days):
             ]
 
             totalPrice += prd[2]
+            orderItemNumber += 1 #i assume this was missing
             items.append(item)
 
         order = [
             orderID,
-            day,
+            currentDate.date().isoformat(),
             time,
             totalPrice,
         ]
@@ -249,12 +273,14 @@ for day_count, day in enumerate(days):
         totalRevenue += totalPrice
         orders.append(order)
 
+    currentDate += timedelta(days=1)
+
 writer = csv.writer(itemsTable)
-writer.writerow(['Order ID', 'Product ID', 'Item ID', 'Size', 'Sugar', 'Ice', 'Extra Milk'])
+writer.writerow(['Order_ID', 'Product_ID', 'Item_ID', 'Size', 'Sugar', 'Ice', 'Extra_Milk'])
 writer.writerows(items)
 
 writer = csv.writer(ordersTable)
-writer.writerow(['Order ID', 'Day', 'Time', 'Price'])
+writer.writerow(['Order_ID', 'Day', 'Time', 'Price'])
 writer.writerows(orders)
 
 ordersTable.close()
