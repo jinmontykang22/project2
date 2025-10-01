@@ -1,0 +1,13 @@
+MK
+
+I created the following tables:
+    ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
+    inventory (inv_item_id INT PKEY, name TEXT, units_remaining INT, numServings INT),
+    items (order_id INT PKEY, product_id INT, item_id TEXT, size TEXT, sugar INT, ice INT, extra_milk INT),
+    orders (order_id INT PKEY, day DATE, time TIME, price DECIMAL),
+    products (product_id INT PKEY, product_name TEXT, price DECIMAL, temperature TEXT, flavor INT, flavor_2 INT, flavor_3 INT, milk DECIMAL, cream INT, sugar INT),
+    staff (name TEXT, id TEXT PKEY, role TEXT, salary INT, hours INT)
+
+these are the headers/attributes in that order per table, with datatype and PKEY if it's the primary key
+you may need to adjust queries slightly (column names, table names) as needed
+
