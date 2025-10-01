@@ -11,3 +11,8 @@ I created the following tables:
 these are the headers/attributes in that order per table, with datatype and PKEY if it's the primary key
 you may need to adjust queries slightly (column names, table names) as needed
 
+FOR ANY QUERY RELATED TO inventory/ingredients, you may have to combine data from tables 'ingredients' and 'inventory.' 
+they were split so that 'ingredients' has the food items related to drinks, while 'inventory' has more generalized items for the shop
+
+check writeALL2.py for additional info on table entries
+
