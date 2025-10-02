@@ -1,11 +1,11 @@
 staff_id,name,role,salary,hours_worked
-S001,Philip Graves,Cook,30510.00,35
-S002,Cameron Hawkins,Barista,28077.00,21
-S003,Ricardo Phillips,Cook,30608.00,34
-S004,Mary Garrett PhD,Cashier,29121.00,28
-S005,Michael Charles,Cashier,33658.00,22
-S006,Karen Russell,Cleaner,24423.00,26
-S007,Sharon Hayden,Manager,89287.00,26
-S008,Justin Jordan,Barista,27303.00,28
-S009,Manuel Lang,Cleaner,25814.00,25
-S010,Miss Sara Barnes,Cleaner,24501.00,39
+S001,Julie Jones,Barista,28354.00,22
+S002,Mason Simon,Cashier,34034.00,32
+S003,Andrew Herrera,Cashier,31786.00,32
+S004,Jason Saunders,Manager,88522.00,32
+S005,Eric Duncan,Manager,85941.00,33
+S006,Tammy Simmons,Barista,30748.00,34
+S007,Carla Hayden,Cleaner,25555.00,28
+S008,Christopher Jenkins,Cleaner,27563.00,24
+S009,Timothy Gordon,Manager,88088.00,30
+S010,Amanda Bennett,Manager,88543.00,21
