@@ -19,18 +19,13 @@ CREATE TABLE inventory(
 \copy inventory from 'C:\Users\monty\CSCE\CSCE_331\project2_personal\project2\tables\inventory.csv' CSV HEADER
 
 CREATE TABLE items (
-    item_id SERIAL PRIMARY KEY,      
-    order_id INT NOT NULL,           
-    product_id INT NOT NULL,        
-    quantity INT NOT NULL CHECK (quantity > 0),
-    size VARCHAR(20) NOT NULL CHECK (size IN ('Small','Medium','Large','Bucees_Large')),
-    sugar_level VARCHAR(5) NOT NULL CHECK (sugar_level IN ('0','50','75','100')),
-    ice_level VARCHAR(5) NOT NULL CHECK (ice_level IN ('0','50','75','100')),
-    toppings TEXT,                  
-    price NUMERIC(10,2) NOT NULL CHECK (price >= 0),
-
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE RESTRICT
+    order_id INT,                
+    product_id INT,
+    item_id INT,
+    size TEXT,
+    sugar INT,
+    ice INT,
+    extra_milk INT
 );
 
 \copy items from 'C:\Users\monty\CSCE\CSCE_331\project2_personal\project2\tables\items.csv' CSV HEADER
