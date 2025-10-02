@@ -65,7 +65,7 @@ CREATE TABLE staff(
     staff_id TEXT PRIMARY KEY,
     name TEXT,
     role TEXT,
-    salary INT,
+    salary DECIMAL,
     hours_worked INT
 );
 
