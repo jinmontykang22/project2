@@ -2,7 +2,7 @@
 -- It groups the orders by the week they were placed and counts the number of orders in each week.
 -- The results are ordered by the week start date.
 SELECT 
-    DATE_TRUNC('week', order_date) AS week_start,
+    DATE_TRUNC('week', order_time) AS week_start,
     COUNT(order_id) AS order_count
 FROM orders
 GROUP BY week_start
@@ -12,7 +12,7 @@ ORDER BY week_start;
 -- This query groups the orders by the hour they were placed and counts the number of orders in each hour.
 -- The results are ordered by the hour of the day.  
 SELECT 
-    DATE_PART('hour', order_date) AS hour_of_day,
+    DATE_PART('hour', order_time) AS hour_of_day,
     COUNT(order_id) AS order_count,
     SUM(total_price) AS total_sales
 FROM orders
@@ -23,7 +23,7 @@ ORDER BY hour_of_day;
 -- This query groups the orders by the date they were placed and sums the total sales for each day.
 -- The results are ordered by total sales in descending order, and only the top 10
 SELECT 
-    DATE(order_date) AS order_day,
+    DATE(order_time) AS order_day,
     SUM(total_price) AS total_sales
 FROM orders
 GROUP BY order_day

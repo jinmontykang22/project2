@@ -10,7 +10,7 @@ Run this and you will see several files in the tables dir.
 new items like boba beads that you would then add to the menu item in products by changing one of the flavors to
 the new ingredient key.
 
-2) inventory.csv which shows a list of the inventory items that our business is keeping track of and the stock
+2) inventory.csv which shows a list of the inventory items that our business are keeping track of and the stock
 of units remaining on each item. This can potentially be merged with ingredients, but it didnt make immediate
 sense to try so I did not.
 
@@ -52,7 +52,7 @@ roles = {
     'Cleaner': (24000, 28000)
 }
 
-staff_data = [['Name', 'ID', 'Role', 'Salary', 'Hours']]
+staff_data = [['staff_id', 'name', 'role', 'salary', 'hours_worked']]
 
 for i in range(1, 11): 
     name = fake.name()
@@ -61,7 +61,7 @@ for i in range(1, 11):
     salary = random.randint(*roles[role])
     hours = random.randint(20, 40)
     
-    staff_data.append([name, staff_id, role, salary, hours])
+    staff_data.append([staff_id, name, role, f"{salary:.2f}", hours])
 
 with open('tables/staff.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
@@ -70,6 +70,9 @@ with open('tables/staff.csv', mode='w', newline='') as file:
 End
 """
 
+"""
+Writing Products File
+"""
 products = [
     (1, "Classic Milk Tea"      , 6.99, 'cold', '1'    , '21'     , '18'      , '0.50'    , '1', '1'), # 1 for 1 scoop
     (2, "Apple Tea"             , 7.49, 'hot' , '2'    , '5'      , '0'      , '0.25'    , '0', '2'),
@@ -102,9 +105,7 @@ products = [
 
 # added new ingredients to 1- 16, 18, 21-23 (mostly just adding water to appropriate teas)
 
-"""
-Writing Products File
-"""
+
 with open('tables/products.csv', 'w', newline='') as productFile:
     writer = csv.writer(productFile)
     writer.writerow(['Product_ID'       , 'Product_Name'    , 'Price'           ,
@@ -178,7 +179,6 @@ with open('tables/inventory.csv', 'w', newline='') as inventoryFile:
 
     writer.writerows(inventory)
 
-
 """
 Writing Orders table and Items table
 """
@@ -201,27 +201,23 @@ startDate = datetime.now() - timedelta(weeks=weekGoal)
 endDate = datetime.now()
 currentDate = startDate
 
-# days = [day for day in iterate_days_in_year(2024)] 
 sizes = ['Small', 'Medium', 'Large', 'Bucees_Large']
 sugar_or_ice = ['0', '50', '75', '100']
+toppings_options = ['Boba','Jelly','Pudding','None']
+status_options = ["Completed","Pending"]
 
 items   = []
 orderID = 1
+itemID = 1
 
 ordersTable     = open('tables/orders.csv', 'w', newline='') #using newline just to be safe. 
 itemsTable      = open('tables/items.csv', 'w', newline='')
 
-# i think that the loop considering both conditions is more natural. it guarantees both conditions are met. 
-# previously, it considered only the number of weeks, and math was probably done to ensure the revenue was 
-# met by price/numItems/numOrders. maybe either way is fine. 
 while (totalRevenue < revenueGoal or currentDate <= endDate):
-    # CHANGE THESE NUMBERS TO INCREASE OR DECREASE THE TOTAL REVENUE, TOTAL ORDERS, etc.
     maxRange = 150
     minRange = 100
     peakDayThreshold = 170
-    # factor = 1
 
-    # SET UP PEAK DAY LOGIC
     peakDay = datetime(2025, 8, 25) # for now, peak day will be 8/25/2025 (first day of school)
         
     numOrders = random.randint(minRange, maxRange)
@@ -235,65 +231,89 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
 
     peakDays += 1 if numOrders >= peakDayThreshold else 0
     for _ in range(numOrders):
+        # Generate random time for order_date
         hour = random.randint(9, 21) # shop open from 9:00 AM - 9:00 PM
-        min = random.randint(0, 59)
-        time = f"{hour:02d}:{min:02d}" # time 
+        minute = random.randint(0, 59)
+        second = random.randint(0, 59)
+        order_datetime = datetime.combine(currentDate.date(), datetime.min.time()) + timedelta(hours=hour, minutes=minute, seconds=second)
+
+        status = random.choice(status_options)
         numItems = random.randint(1, 5)
         totalPrice = 0
-        orderItemNumber = 1 
-        # This will be an extension to the orderID, like rooms are to floors,
-        # the first item of the first order will have itemID = 11, second ID = 12
+        order_items_for_this_order = []
+
         for _ in range(numItems):
             prd = random.choice(products)
             productID = prd[0]
-            itemID = str(orderID) + '.' + str(orderItemNumber) # is itemID going to be a primary key? it may be difficult to read/search in current format (maybe '_' or '.' instead of space)
-            size = random.choice(sizes) #should size affect price? what does the price in products represent (the standard drink)? is medium the assumption?
-            if (size == 'Small'):
-                totalPrice -= 0.5
-            elif (size == 'Large'):
-                totalPrice += 0.5
-            elif (size == 'Bucees_Large'):
-                totalPrice += 1.0
-            sugar = random.choice(sugar_or_ice)
-            ice = random.choice(sugar_or_ice)
-            extra_milk = random.randint(0,1)
-            # Charge for milk added on
-            if extra_milk:
-                totalPrice += 0.5 
-            # milk = 'Milk' if extra_milk else 'No Milk' #doesn't seem like it's ('milk') used
+            base_price = prd[4]
+
+            quantity = random.randint(1,3)
+            size = random.choice(sizes)
+            sugar_level = random.choice(sugar_or_ice)
+            ice_level = random.choice(sugar_or_ice)
+            # toppings: random subset from toppings_options excluding 'None' if other toppings chosen
+            chosen_toppings = random.sample(toppings_options, random.randint(1, len(toppings_options)))
+            if 'None' in chosen_toppings and len(chosen_toppings) > 1:
+                chosen_toppings.remove('None')
+            toppings_str = ','.join(chosen_toppings)
+
+            # Calculate price modifications
+            price = base_price * quantity
+            if size == 'Small':
+                price -= 0.5 * quantity
+            elif size == 'Large':
+                price += 0.5 * quantity
+            elif size == 'Bucees_Large':
+                price += 1.0 * quantity
+
+            # Charge for toppings except 'None'
+            if 'Boba' in chosen_toppings:
+                price += 0.5 * quantity
+            if 'Jelly' in chosen_toppings:
+                price += 0.5 * quantity
+            if 'Pudding' in chosen_toppings:
+                price += 0.5 * quantity
+
+            totalPrice += price
 
             item = [
+                itemID,
                 orderID,
                 productID,
-                itemID,
+                quantity,
                 size,
-                sugar,
-                ice,
-                extra_milk
+                sugar_level,
+                ice_level,
+                toppings_str,
+                round(price,2)
             ]
+            order_items_for_this_order.append(item)
+            itemID += 1
 
-            totalPrice += prd[2]
-            orderItemNumber += 1 #i assume this was missing
-            items.append(item)
+        tip = round(random.uniform(0,5),2) if status == "Completed" else 0.00
+        special_notes = fake.sentence() if random.random() < 0.3 else ""
 
         order = [
             orderID,
-            currentDate.date().isoformat(),
-            time,
-            totalPrice,
+            order_datetime.isoformat(sep=' '),
+            status,
+            round(totalPrice,2),
+            tip,
+            special_notes
         ]
         orderID += 1
         totalRevenue += totalPrice
         orders.append(order)
+        items.extend(order_items_for_this_order)
 
     currentDate += timedelta(days=1)
 
 writer = csv.writer(itemsTable)
-writer.writerow(['Order_ID', 'Product_ID', 'Item_ID', 'Size', 'Sugar', 'Ice', 'Extra_Milk'])
+writer.writerow(['item_id','order_id','product_id','quantity','size','sugar_level','ice_level','toppings','price'])
 writer.writerows(items)
 
 writer = csv.writer(ordersTable)
-writer.writerow(['Order_ID', 'Day', 'Time', 'Price'])
+writer.writerow(['order_id','order_time','status','total_price','tip','special_notes'])
 writer.writerows(orders)
 
 ordersTable.close()

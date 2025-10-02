@@ -1,11 +1,11 @@
-Name,ID,Role,Salary,Hours
-Jaclyn Becker,S001,Cleaner,24208,33
-Christopher Long,S002,Cleaner,27718,34
-Sandy Smith,S003,Cashier,29637,26
-Tyler Park,S004,Cashier,30901,29
-Ashley Rodriguez,S005,Cook,30549,20
-Kristin Le,S006,Cleaner,25816,26
-Zachary Mendoza,S007,Cashier,29477,40
-Curtis Gomez,S008,Cleaner,26944,24
-David Nguyen,S009,Cleaner,26368,26
-Daniel Rios,S010,Manager,84453,31
+staff_id,name,role,salary,hours_worked
+S001,Kelly Martin,Cleaner,27901.00,35
+S002,Carol Moreno,Cashier,29019.00,40
+S003,Sara Rivera,Cleaner,24390.00,30
+S004,Brian Guzman III,Cashier,34583.00,40
+S005,Richard Richards,Barista,30263.00,40
+S006,Lisa Mendoza,Cleaner,27745.00,40
+S007,Joseph Velasquez,Cook,32259.00,33
+S008,Kathleen Daniels,Cook,31766.00,24
+S009,Elaine Mcbride,Barista,30018.00,29
+S010,Joshua Hernandez,Cleaner,24840.00,25
