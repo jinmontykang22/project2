@@ -21,7 +21,7 @@ CREATE TABLE inventory(
 CREATE TABLE items (
     order_id INT,                
     product_id INT,
-    item_id INT,
+    item_id DECIMAL PRIMARY KEY,
     size TEXT,
     sugar INT,
     ice INT,
@@ -31,12 +31,10 @@ CREATE TABLE items (
 \copy items from 'C:\Users\monty\CSCE\CSCE_331\project2_personal\project2\tables\items.csv' CSV HEADER
 
 CREATE TABLE orders (
-    order_id        SERIAL PRIMARY KEY,
-    order_time      TIMESTAMP NOT NULL,
-    status          VARCHAR(20) NOT NULL CHECK (status IN ('Completed', 'Pending')),
-    total_price     NUMERIC(10,2) NOT NULL,
-    tip             NUMERIC(10,2) DEFAULT 0.00,
-    special_notes   VARCHAR(255)
+    order_id INT PRIMARY KEY,
+    day DATE,
+    time TIME,
+    price DECIMAL
 );
 
 \copy orders from 'C:\Users\monty\CSCE\CSCE_331\project2_personal\project2\tables\orders.csv' CSV HEADER
@@ -69,7 +67,7 @@ CREATE TABLE staff(
 
 -- ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
 --     inventory (inv_item_id INT PKEY, name TEXT, units_remaining INT, numServings INT),
---     items (order_id INT, product_id INT, item_id TEXT PKEY, size TEXT, sugar INT, ice INT, extra_milk INT), --typo, pkey is not order_id; it is item_id
+--     items (order_id INT, product_id INT, item_id DECIMAL PKEY, size TEXT, sugar INT, ice INT, extra_milk INT), --typo, pkey is not order_id; it is item_id
 --     orders (order_id INT PKEY, day DATE, time TIME, price DECIMAL),
 --     products (product_id INT PKEY, product_name TEXT, price DECIMAL, temperature TEXT, flavor INT, flavor_2 INT, flavor_3 INT, milk DECIMAL, cream INT, sugar INT),
 --     staff (name TEXT, id TEXT PKEY, role TEXT, salary INT, hours INT)
