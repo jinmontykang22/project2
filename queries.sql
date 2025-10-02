@@ -1,3 +1,30 @@
+CREATE TABLE Items (
+    item_id SERIAL PRIMARY KEY,      
+    order_id INT NOT NULL,           
+    product_id INT NOT NULL,        
+    quantity INT NOT NULL CHECK (quantity > 0),
+    size VARCHAR(20) NOT NULL CHECK (size IN ('Small','Medium','Large','Bucees_Large')),
+    sugar_level VARCHAR(5) NOT NULL CHECK (sugar_level IN ('0','50','75','100')),
+    ice_level VARCHAR(5) NOT NULL CHECK (ice_level IN ('0','50','75','100')),
+    toppings TEXT,                  
+    price NUMERIC(10,2) NOT NULL CHECK (price >= 0),
+
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE RESTRICT
+);
+
+CREATE TABLE Orders (
+    order_id        SERIAL PRIMARY KEY,
+    order_time      TIMESTAMP NOT NULL,
+    status          VARCHAR(20) NOT NULL CHECK (status IN ('Completed', 'Pending')),
+    total_price     NUMERIC(10,2) NOT NULL,
+    tip             NUMERIC(10,2) DEFAULT 0.00,
+    special_notes   VARCHAR(255)
+);
+
+
+
+
 -- grabs the orders from a specific time frame and sort them
 SELECT *
 FROM Orders
