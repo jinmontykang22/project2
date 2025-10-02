@@ -269,7 +269,7 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
             tip,
             special_notes
         ]
-        orderID = (orderID+1)%30000+1
+        orderID = (orderID+1)
         totalRevenue += totalPrice
         orders.append(order)
         items.extend(order_items_for_this_order)
