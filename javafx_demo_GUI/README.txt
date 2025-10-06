@@ -3,8 +3,10 @@ This is a demo for running queries with javafx instead of the jdbc example done 
 The hierarchy/file structure should remain the exact same as how it's organized in this folder ('javafx_demo_GUI')
 
 here are the commands to compile + run while in terminal (I used WINDOWS powershell, may not exactly work for Mac):
+--------my computer's specs/installations--------
 -JavaFX = javafx-sdk-21.0.7 (.jar files and the bin folder were copied into this project's lib folder)
 -JDK = openjdk 21.0.6 2025-01-21 LTS
+-------------------------------------------------
 
 cd to_folder_location_on_your_device
 javac --module-path lib --add-modules javafx.controls,javafx.fxml -cp "lib/*" -d bin src/jdbc_scenebuilder/*.java
