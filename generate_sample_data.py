@@ -289,33 +289,34 @@ itemsTable.close()
 
 print(f'TOTAL REVENUE: {totalRevenue:.02f}\nTOTAL WEEKS: 39\nTOTAL ORDERS: {len(orders)}\nTOTAL ITEMS ORDERED: {len(items)}\nPEAK DAYS: {peakDays}')
 
+# updated products with 'categories' replacing 'temperature'
 
 products = [
-    (1, "Classic Milk Tea"      , 6.99, 'cold', '1'    , '21'     , '18'      , '0.50'    , '1', '1'), # 1 for 1 scoop
-    (2, "Apple Tea"             , 7.49, 'hot' , '2'    , '5'      , '0'      , '0.25'    , '0', '2'),
-    (3, "Peach Tea"             , 7.99, 'cold', '3'    , '5'      , '0'      , '0.25'    , '0', '2'),
-    (4, "Lemon Tea"             , 6.99, 'cold', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
-    (5, "Green Tea"             , 6.99, 'cold', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
-    (6, "Rasberry Tea"          , 7.99, 'cold', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
+    (1, "Classic Milk Tea"      , 6.99, 'milk', '1'    , '21'     , '18'      , '0.50'    , '1', '1'), # 1 for 1 scoop
+    (2, "Apple Tea"             , 7.49, 'fruit' , '2'    , '5'      , '0'      , '0.25'    , '0', '2'),
+    (3, "Peach Tea"             , 7.99, 'fruit', '3'    , '5'      , '0'      , '0.25'    , '0', '2'),
+    (4, "Lemon Tea"             , 6.99, 'fruit', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
+    (5, "Green Tea"             , 6.99, 'hot', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
+    (6, "Rasberry Tea"          , 7.99, 'fruit', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
     (7, "Matcha Tea"            , 7.49, 'cold', '8'    , '21'     , '18'      , '0.00'    , '1', '0'),
-    (8, "Orange Tea"            , 6.99, 'cold', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
-    (9, "Fruity Boba Tea"       , 7.49, 'cold', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
+    (8, "Orange Tea"            , 6.99, 'fruit', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
+    (9, "Fruity Boba Tea"       , 7.49, 'fruit', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
     (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '0'     , '17'      , '0.25'    , '0', '0'),
     (11, "Earl Grey Tea"        , 7.99, 'hot' , '1'    , '9'      , '0'      , '0.00'    , '0', '0'),
-    (12, "Taro Tea"             , 6.99, 'hot' , '22'   , '21'     , '18'      , '0.50'    , '0', '0'),
+    (12, "Taro Tea"             , 6.99, 'milk' , '22'   , '21'     , '18'      , '0.50'    , '0', '0'),
     (13, "Ulong Tea"            , 7.99, 'hot' , '12'   , '0'     , '17'      , '0.00'    , '0', '0'),
     (14, "Peppermint Tea"       , 7.49, 'hot' , '10'   , '0'      , '20'      , '0.00'    , '2', '1'),
     (15, "Black Tea"            , 7.99, 'hot' , '1'    , '0'     , '17'      , '0.00'    , '0', '0'),
     (16, "Rooibos Tea"          , 7.99, 'hot' , '1'    , '5'      , '0'      , '0.00'    , '1', '1'),
-    (17, "Apricot Amaretto Tea" , 7.49, 'hot' , '15'   , '14'     , '10'      , '0.00'    , '0', '0'),
-    (18, "Belgian Mint Tea"     , 7.99, 'cold', '10'   , '6'      , '0'      , '0.00'    , '1', '1'),
-    (19, "Caremel Nougat Tea"   , 7.99, 'hot' , '14'   , '1'      , '15'      , '0.25'    , '1', '0'),
-    (20, "Cherry Cosmo Tea"     , 7.99, 'cold', '16'   , '9'      , '14'      , '0.00'    , '0', '1'),
-    (21, "Chocolate Fondue Tea" , 7.99, 'hot' , '15'   , '11'     , '21'      , '0.50'    , '1', '0'),
-    (22, "Darjelinge Quince Tea", 7.49, 'cold', '8'    , '9'      , '0'      , '0.00'    , '1', '1'),
-    (23, "Hibiscus Blossom Tea" , 7.99, 'hot' , '10'   , '9'      , '0'      , '0.00'    , '1', '1'),
-    (24, "Honey Hojicha Tea"    , 7.99, 'cold', '11'   , '5'      , '12'      , '0.00'    , '1', '1'),
-    (25, "CUSTOM TEA"           , 7.99, 'cold', '17'   , '17'     , '17'      , '0.00'    , '0', '0'), 
+    (17, "Apricot Amaretto Tea" , 7.49, 'fruit' , '15'   , '14'     , '10'      , '0.00'    , '0', '0'),
+    (18, "Belgian Mint Tea"     , 7.99, 'hot', '10'   , '6'      , '0'      , '0.00'    , '1', '1'),
+    (19, "Caremel Nougat Tea"   , 7.99, 'milk' , '14'   , '1'      , '15'      , '0.25'    , '1', '0'),
+    (20, "Cherry Cosmo Tea"     , 7.99, 'fruit', '16'   , '9'      , '14'      , '0.00'    , '0', '1'),
+    (21, "Chocolate Fondue Tea" , 7.99, 'milk' , '15'   , '11'     , '21'      , '0.50'    , '1', '0'),
+    (22, "Darjelinge Quince Tea", 7.49, 'hot', '8'    , '9'      , '0'      , '0.00'    , '1', '1'),
+    (23, "Hibiscus Blossom Tea" , 7.99, 'fruit' , '10'   , '9'      , '0'      , '0.00'    , '1', '1'),
+    (24, "Honey Hojicha Tea"    , 7.99, 'fruit', '11'   , '5'      , '12'      , '0.00'    , '1', '1'),
+    (25, "CUSTOM TEA"           , 7.99, 'milk', '17'   , '17'     , '17'      , '0.00'    , '0', '0'), 
     # Default values for the custom tea, the staff wll construct this on their own if necessary, but 
     # will be instructed to do so infrequently.
 ]
@@ -328,7 +329,7 @@ Writing Products File
 with open('tables/products.csv', 'w', newline='') as productFile:
     writer = csv.writer(productFile)
     writer.writerow(['Product_ID'       , 'Product_Name'    , 'Price'           ,
-                     'Temperature'      , 'Flavor'          , 'Flavor_2'        , 
+                     'Category'      , 'Flavor'          , 'Flavor_2'        , 
                      'Flavor_3'         , 'Milk'            , 'Cream'           ,
                      'Sugar'     ])
     
