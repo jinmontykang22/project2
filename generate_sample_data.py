@@ -298,7 +298,7 @@ products = [
     (4, "Lemon Tea"             , 6.99, 'fruit', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
     (5, "Green Tea"             , 6.99, 'hot', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
     (6, "Rasberry Tea"          , 7.99, 'fruit', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
-    (7, "Matcha Tea"            , 7.49, 'cold', '8'    , '21'     , '18'      , '0.00'    , '1', '0'),
+    (7, "Matcha Tea"            , 7.49, 'milk', '8'    , '21'     , '18'      , '0.00'    , '1', '0'), #NOTE: this should be milk, not cold. manually changed in db for now
     (8, "Orange Tea"            , 6.99, 'fruit', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
     (9, "Fruity Boba Tea"       , 7.49, 'fruit', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
     (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '0'     , '17'      , '0.25'    , '0', '0'),
