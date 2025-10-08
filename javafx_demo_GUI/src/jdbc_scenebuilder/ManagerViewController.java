@@ -205,6 +205,55 @@ public class ManagerViewController {
         }
     }
 
+    @FXML
+    private void addInventory() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-inventory.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Inventory");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait(); // Wait for user to finish
+            initialize();        // Refresh main table
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void updateInventory() {
+        try {
+            // Get selected row from your inventory table (assuming it's called inventoryArea)
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an inventory item to update.").showAndWait();
+                return;
+            }
+
+            // Load the update-inventory.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-inventory.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Inventory");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected row data to controller
+            UpdateInventoryController controller = loader.getController();
+            controller.setInventoryData(
+                    Integer.parseInt(selectedRow.get(0)),  // inv_item_id
+                    selectedRow.get(1),                    // name
+                    Integer.parseInt(selectedRow.get(2)),  // units_remaining
+                    Integer.parseInt(selectedRow.get(3))   // numServings
+            );
+
+            stage.showAndWait();
+            initialize(); // refresh table
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
     private void populateLineChart(List<Map<String, String>> data) {
         lineChart.getData().clear();
         if (data.isEmpty()) {

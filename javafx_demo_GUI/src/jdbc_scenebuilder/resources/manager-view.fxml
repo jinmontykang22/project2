@@ -40,16 +40,29 @@
                 </SplitPane>
             </children>
         </HBox>
-        <SplitPane dividerPositions="0.33152173913043476" layoutX="131.0" layoutY="89.0" prefHeight="498.0" prefWidth="738.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+        <SplitPane dividerPositions="0.5" layoutX="131.0" layoutY="89.0" prefHeight="498.0" prefWidth="738.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                  <SplitPane cacheShape="false" centerShape="false" dividerPositions="0.0947136563876652, 0.5" orientation="VERTICAL" prefHeight="456.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane cacheShape="false" centerShape="false" dividerPositions="0.0947136563876652, 0.5, 0.5, 0.5, 0.5" orientation="VERTICAL" prefHeight="456.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                         <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#addItem" text="Add Item" />
-                              <Button mnemonicParsing="false" onAction="#updateItem" text="Update Item" />
+                              <Button mnemonicParsing="false" onAction="#addItem" text="Add Item on Menu" />
+                              <Button mnemonicParsing="false" onAction="#updateItem" text="Update Item on Menu" />
+                           </children>
+                        </HBox>
+                        <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addInventory" text="Add Item in Inventory" />
+                              <Button mnemonicParsing="false" onAction="#updateInventory" text="Update Item in Inventory" />
+                           </children>
+                        </HBox>
+                        <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addInventory" text="Add Employee" />
+                              <Button mnemonicParsing="false" text="Update Employee" />
+                              <Button mnemonicParsing="false" text="Remove Employee" />
                            </children>
                         </HBox>
                       <AnchorPane maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0">
@@ -62,6 +75,12 @@
                                     <TableView fx:id="tableArea" prefHeight="408.0" prefWidth="239.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
+                        <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addInventory" text="Add Item in Inventory" />
+                              <Button mnemonicParsing="false" text="Update Item in Inventory" />
+                           </children>
+                        </HBox>
                     </items>
                      <contextMenu>
                         <ContextMenu>
@@ -97,7 +116,8 @@
                     </yAxis>
                   </LineChart>
                   <PieChart fx:id="pieChart" layoutX="398.0" layoutY="323.0" prefHeight="239.0" prefWidth="261.0" />
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
             </items>
         </SplitPane>
     </children>

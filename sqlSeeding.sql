@@ -25,7 +25,7 @@ CREATE TABLE products(
 \copy products from './tables/products.csv' CSV HEADER
 
 CREATE TABLE inventory(
-    inv_item_id INT PRIMARY KEY,
+    inv_item_id SERIAL PRIMARY KEY,
     name TEXT, -- changed from 'name'
     units_remaining INT,
     numServings INT
@@ -73,6 +73,10 @@ CREATE TABLE staff(
 
 \copy staff from './tables/staff.csv' CSV HEADER
 
+SELECT setval(pg_get_serial_sequence('products', 'product_id'), COALESCE(MAX(product_id), 1)) FROM products;
+SELECT setval(pg_get_serial_sequence('inventory', 'inv_item_id'), COALESCE(MAX(inv_item_id), 1)) FROM inventory;
+SELECT setval(pg_get_serial_sequence('orders', 'order_id'), COALESCE(MAX(order_id), 1)) FROM orders;
+SELECT setval(pg_get_serial_sequence('items', 'item_id'), COALESCE(MAX(item_id), 1)) FROM items;
 
 -- ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
 --     inventory (inv_item_id INT PKEY, name TEXT, units_remaining INT, numServings INT),
