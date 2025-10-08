@@ -168,6 +168,43 @@ public class ManagerViewController {
         }
     }
 
+    @FXML
+    private void updateItem() {
+        try {
+            // Get selected row from table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select a product to update.").showAndWait();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-product.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Product");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected data to controller
+            UpdateProductController controller = loader.getController();
+            controller.setProductData(
+                    Integer.parseInt(selectedRow.get(0)), // product_id
+                    selectedRow.get(1),                   // product_name
+                    Double.parseDouble(selectedRow.get(2)), // price
+                    selectedRow.get(3),                   // category
+                    Integer.parseInt(selectedRow.get(4)), // flavor
+                    Double.parseDouble(selectedRow.get(7)), // milk
+                    Integer.parseInt(selectedRow.get(8)), // cream
+                    Integer.parseInt(selectedRow.get(9))  // sugar
+            );
+
+            stage.showAndWait();
+            initialize(); // refresh table
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
     private void populateLineChart(List<Map<String, String>> data) {
         lineChart.getData().clear();
         if (data.isEmpty()) {
