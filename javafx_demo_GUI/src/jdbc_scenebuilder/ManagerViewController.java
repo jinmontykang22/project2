@@ -9,8 +9,11 @@ import javafx.event.ActionEvent;
 import java.sql.*;
 import java.util.*;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import jdbc_scenebuilder.dbSetup;
 
 public class ManagerViewController {
@@ -152,11 +155,17 @@ public class ManagerViewController {
     }
 
     @FXML
-    private void addItem(){
-        String sqlAddItem = "INSERT INTO products (product_id, product_name, price, category, flavor, flavor_2, flavor_3, milk, cream, sugar) " +
-                "VALUES (101, 'Thai Milk Tea', 4.50, 'Milk Tea', 1, NULL, NULL, 1.0, 0, 75);";
-        runQuery(sqlAddItem);
-        initialize();
+    private void addItem() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-product.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Product");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait();  // wait until user closes the dialog
+            initialize();         // refresh the main table
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void populateLineChart(List<Map<String, String>> data) {

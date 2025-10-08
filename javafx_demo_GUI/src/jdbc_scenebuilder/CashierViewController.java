@@ -197,7 +197,11 @@ public class CashierViewController {
             }
 
             for (String[] pc : product_category) {
-                product_category_map.get(pc[1]).add(pc[0]);
+                String category = pc[1];
+                String productName = pc[0];
+                product_category_map
+                    .computeIfAbsent(category, k -> new ArrayList<>())
+                    .add(productName);
             }
 
             // Close connection
