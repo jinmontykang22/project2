@@ -36,6 +36,9 @@ public class ManagerViewController {
     @FXML
     private NumberAxis lineYAxis;
 
+    @FXML
+    private ComboBox<String> tableSelector;
+
 
     private static final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu/gang_52_db"; //database location
 
@@ -53,9 +56,40 @@ public class ManagerViewController {
         // Set up what happens when button is clicked
         // switch_view.setOnAction(event -> runQuery("SELECT product_name FROM products"));
         // This needs to switch back to the login page.
+        tableSelector.getItems().addAll("Products", "Orders", "Inventory", "Staff", "Ingredients", "Items");
+        tableSelector.getSelectionModel().selectFirst();
         setMenu();
 
     }
+
+
+    @FXML
+    private void onTableSelected() {
+        String selected = tableSelector.getValue();
+        switch (selected) {
+            case "Products":
+                setMenu();
+                break;
+            case "Orders":
+                setOrders();
+                break;
+            case "Inventory":
+                setInventory();
+                break;
+            case "Staff":
+                setStaff();
+                break;
+            case "Ingredients":
+                setIngredients();
+                break;
+            case "Items":
+                setItems();
+                break;
+            default:
+                break;
+        }
+    }
+
     //Define an action whenever a new view is selected from the dropdown menu.
     @FXML
     public void setMenu() {
