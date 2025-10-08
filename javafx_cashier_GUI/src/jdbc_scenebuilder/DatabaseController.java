@@ -79,7 +79,7 @@ public class DatabaseController {
 
         closeButton.setOnAction(event -> closeWindow());
 
-        Map<String, List<String>> prod_cat_map = create_product_category_map("SELECT product_name, category FROM products");
+        Map<String, List<String>> prodCatMap = createProductCategoryMap("SELECT product_name, category FROM products");
 
         for (Button b : drinkButtons) {
             b.setText(""); 
@@ -90,10 +90,10 @@ public class DatabaseController {
         for (int i = 0; i < categoryButtons.length; i++) {
             int lambda_i = i; //needs this for some reason: local variables referenced from a lambda expression must be final or effectively final
             categoryButtons[i].setText(categories[i].toUpperCase());
-            categoryButtons[i].setOnAction(event -> populateByCategory(categories[lambda_i], prod_cat_map));
+            categoryButtons[i].setOnAction(event -> populateByCategory(categories[lambda_i], prodCatMap));
         }
 
-        populateByCategory(categories[0], prod_cat_map);
+        populateByCategory(categories[0], prodCatMap);
     }
 
     //on button click, adds the drink to the order summary text area
@@ -107,16 +107,16 @@ public class DatabaseController {
     }
 
     //populates the drink buttons based on the selected category
-    private void populateByCategory(String category, Map<String, List<String>> product_category_map) {
-        List<String> product_names = product_category_map.get(category);
+    private void populateByCategory(String category, Map<String, List<String>> productCategoryMap) {
+        List<String> productNames = productCategoryMap.get(category);
 
         for (Button b : drinkButtons) {
             b.setText(""); 
             b.setVisible(false); 
         }
 
-        for (int i = 0; i < product_names.size() && i < drinkButtons.length; i++) {
-            drinkButtons[i].setText(product_names.get(i));
+        for (int i = 0; i < productNames.size() && i < drinkButtons.length; i++) {
+            drinkButtons[i].setText(productNames.get(i));
             drinkButtons[i].setVisible(true); 
         }
     }
@@ -160,7 +160,7 @@ public class DatabaseController {
     }
     
     // Creates a map of product names to their categories. used in various places
-    private Map<String, List<String>> create_product_category_map(String sqlStatement) {
+    private Map<String, List<String>> createProductCategoryMap(String sqlStatement) {
         try {
             // Get database creditials
             dbSetup my = new dbSetup();
@@ -175,18 +175,18 @@ public class DatabaseController {
             // Run sql query
             ResultSet rs = stmt.executeQuery(sqlStatement);
 
-            List<String[]> product_category = new ArrayList<>(); //no tuple in java ;-;
+            List<String[]> productCategory = new ArrayList<>(); //no tuple in java ;-;
             while (rs.next()) {
-                product_category.add(new String[]{rs.getString("product_name"), rs.getString("category")});
+                productCategory.add(new String[]{rs.getString("product_name"), rs.getString("category")});
             }
 
-            Map<String, List<String>> product_category_map = new HashMap<>(); 
+            Map<String, List<String>> productCategoryMap = new HashMap<>(); 
             for (String cat : categories) {
-                product_category_map.put(cat, new ArrayList<>());
+                productCategoryMap.put(cat, new ArrayList<>());
             }
 
-            for (String[] pc : product_category) {
-                product_category_map.get(pc[1]).add(pc[0]);
+            for (String[] pc : productCategory) {
+                productCategoryMap.get(pc[1]).add(pc[0]);
             }
 
             // Close connection
@@ -194,7 +194,7 @@ public class DatabaseController {
             stmt.close();
             conn.close();
 
-            return product_category_map;
+            return productCategoryMap;
 
         } catch (Exception e) {
             orderSumArea.setText("Error connecting to database:\n" + e.getMessage());
