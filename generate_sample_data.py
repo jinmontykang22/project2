@@ -154,7 +154,7 @@ products = [
     (4, "Lemon Tea"             , 6.99, 'fruit', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
     (5, "Green Tea"             , 6.99, 'hot', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
     (6, "Rasberry Tea"          , 7.99, 'fruit', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
-    (7, "Matcha Tea"            , 7.49, 'cold', '8'    , '21'     , '18'      , '0.00'    , '1', '0'),
+    (7, "Matcha Tea"            , 7.49, 'fruit', '8'    , '21'     , '18'      , '0.00'    , '1', '0'),
     (8, "Orange Tea"            , 6.99, 'fruit', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
     (9, "Fruity Boba Tea"       , 7.49, 'fruit', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
     (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '0'     , '17'      , '0.25'    , '0', '0'),
@@ -243,7 +243,6 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
             productID = prd[0]
             base_price = prd[2]
 
-            quantity = random.randint(1,3)
             size = random.choice(sizes)
             sugar_level = random.choice(sugar_or_ice)
             ice_level = random.choice(sugar_or_ice)
@@ -254,21 +253,16 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
             toppings_str = ','.join(chosen_toppings)
 
             # Calculate price modifications
-            price = base_price * quantity
+            price = base_price
             if size == 'Small':
-                price -= 0.5 * quantity
+                price -= 0.5
             elif size == 'Large':
-                price += 0.5 * quantity
+                price += 0.5
             elif size == 'Bucees_Large':
-                price += 1.0 * quantity
+                price += 1.0
 
-            # Charge for toppings except 'None'
-            if 'Boba' in chosen_toppings:
-                price += 0.5 * quantity
-            if 'Jelly' in chosen_toppings:
-                price += 0.5 * quantity
-            if 'Pudding' in chosen_toppings:
-                price += 0.5 * quantity
+            # Charge for number of toppings
+            price += 0.5 * len(chosen_toppings)
 
             totalPrice += price
 
@@ -276,7 +270,6 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
                 itemID,
                 orderID,
                 productID,
-                quantity,
                 size,
                 sugar_level,
                 ice_level,
@@ -289,11 +282,17 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
         tip = round(random.uniform(0,5),2)
         special_notes = fake.sentence() if random.random() < 0.3 else ""
 
-        month = int(order_datetime.isoformat(sep=' ').split(' ')[0].split('-')[1])
+        timeData = order_datetime.isoformat(sep=' ').split(' ')
+        time = timeData[1]
+        day = int(timeData[0].split('-')[2])
+        month = int(timeData[0].split('-')[1])
+        year = int(timeData[0].split('-')[0])
         order = [
             orderID,
-            order_datetime.isoformat(sep=' '),
+            time,
+            day,
             month,
+            year,
             round(totalPrice,2),
             tip,
             special_notes
@@ -306,11 +305,11 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
     currentDate += timedelta(days=1)
 
 writer = csv.writer(itemsTable)
-writer.writerow(['item_id','order_id','product_id','quantity','size','sugar_level','ice_level','toppings','price'])
+writer.writerow(['item_id','order_id','product_id','size','sugar_level','ice_level','toppings','price'])
 writer.writerows(items)
 
 writer = csv.writer(ordersTable)
-writer.writerow(['order_id','order_time','month','total_price','tip','special_notes'])
+writer.writerow(['order_id','time','day','month','year','total_price','tip','special_notes'])
 writer.writerows(orders)
 
 ordersTable.close()
