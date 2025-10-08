@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
+//javac --module-path lib --add-modules javafx.controls,javafx.fxml -d bin src/jdbc_scenebuilder/*.java
+//then copy resources folder to bin if changed in SceneBuilder
+//java "-Djava.library.path=lib/bin" --module-path lib --add-modules javafx.controls,javafx.fxml -cp "bin;lib/*" jdbc_scenebuilder.ViewApp
 public class ViewApp extends Application {
     private static Stage primaryStage;
 
