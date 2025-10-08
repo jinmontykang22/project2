@@ -1,13 +1,15 @@
 package jdbc_scenebuilder;
 
 import java.sql.*;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
-public class DatabaseController {
-    
+public class CashierViewController {
+
     @FXML
     private Button queryButton; //match the fx:id value from Scene Builder
     
@@ -44,7 +46,11 @@ public class DatabaseController {
 
     @FXML
     private TextArea orderSumArea; //match the fx:id value from Scene Builder
-    
+
+    @FXML
+    private void switchToManagerView(ActionEvent event) throws Exception {
+        ViewApp.changeScene("manager-view.fxml");
+    }
     
     private static final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu/gang_52_db"; //database location
     

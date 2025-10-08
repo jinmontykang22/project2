@@ -10,9 +10,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jdbc_scenebuilder.DatabaseController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jdbc_scenebuilder.CashierViewController">
    <children>
-      <Button fx:id="queryButton" mnemonicParsing="false" text="Display total_price" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="queryButton" mnemonicParsing="false" text="Display total_price" />
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToManagerView" text="Switch View" />
+         </children>
+      </HBox>
       <TextArea fx:id="resultArea" editable="false" prefHeight="200.0" prefWidth="200.0" />
       <Button fx:id="closeButton" mnemonicParsing="false" text="Close" />
       <HBox alignment="CENTER" prefHeight="236.0" prefWidth="539.0">
