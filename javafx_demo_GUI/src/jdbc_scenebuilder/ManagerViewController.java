@@ -9,8 +9,11 @@ import javafx.event.ActionEvent;
 import java.sql.*;
 import java.util.*;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import jdbc_scenebuilder.dbSetup;
 
 public class ManagerViewController {
@@ -152,11 +155,54 @@ public class ManagerViewController {
     }
 
     @FXML
-    private void addItem(){
-        String sqlAddItem = "INSERT INTO products (product_id, product_name, price, category, flavor, flavor_2, flavor_3, milk, cream, sugar) " +
-                "VALUES (101, 'Thai Milk Tea', 4.50, 'Milk Tea', 1, NULL, NULL, 1.0, 0, 75);";
-        runQuery(sqlAddItem);
-        initialize();
+    private void addItem() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-product.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Product");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait();  // wait until user closes the dialog
+            initialize();         // refresh the main table
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateItem() {
+        try {
+            // Get selected row from table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select a product to update.").showAndWait();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-product.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Product");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected data to controller
+            UpdateProductController controller = loader.getController();
+            controller.setProductData(
+                    Integer.parseInt(selectedRow.get(0)), // product_id
+                    selectedRow.get(1),                   // product_name
+                    Double.parseDouble(selectedRow.get(2)), // price
+                    selectedRow.get(3),                   // category
+                    Integer.parseInt(selectedRow.get(4)), // flavor
+                    Double.parseDouble(selectedRow.get(7)), // milk
+                    Integer.parseInt(selectedRow.get(8)), // cream
+                    Integer.parseInt(selectedRow.get(9))  // sugar
+            );
+
+            stage.showAndWait();
+            initialize(); // refresh table
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
     }
 
     private void populateLineChart(List<Map<String, String>> data) {

@@ -46,7 +46,12 @@
                     <children>
                   <SplitPane cacheShape="false" centerShape="false" dividerPositions="0.0947136563876652, 0.5" orientation="VERTICAL" prefHeight="456.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <Button mnemonicParsing="false" onAction="#addItem" text="Add Product" />
+                        <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addItem" text="Add Item" />
+                              <Button mnemonicParsing="false" onAction="#updateItem" text="Update Item" />
+                           </children>
+                        </HBox>
                       <AnchorPane maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0">
                            <children>
                               <Text fill="#8a7f7f" strokeType="OUTSIDE" strokeWidth="0.0" text="Right click to change views..." textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="7.0" />
