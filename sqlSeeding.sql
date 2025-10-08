@@ -13,7 +13,7 @@ CREATE TABLE products(
     product_id INT PRIMARY KEY,
     product_name TEXT,
     price DECIMAL,
-    temperature TEXT,
+    category TEXT,
     flavor INT,
     flavor_2 INT,
     flavor_3 INT,
@@ -37,7 +37,7 @@ CREATE TABLE inventory(
 CREATE TABLE orders (
     order_id        SERIAL PRIMARY KEY,
     order_time      TIMESTAMP NOT NULL,
-    status          VARCHAR(20) NOT NULL CHECK (status IN ('Completed', 'Pending')),
+    month           SMALLINT NOT NULL CHECK (month >= 1 AND month <= 12),
     total_price     NUMERIC(10,2) NOT NULL,
     tip             NUMERIC(10,2) DEFAULT 0.00,
     special_notes   VARCHAR(255)
