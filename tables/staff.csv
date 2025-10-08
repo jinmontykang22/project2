@@ -1,11 +1,11 @@
 staff_id,name,role,salary,hours_worked
-S001,Julie Jones,Barista,28354.00,22
-S002,Mason Simon,Cashier,34034.00,32
-S003,Andrew Herrera,Cashier,31786.00,32
-S004,Jason Saunders,Manager,88522.00,32
-S005,Eric Duncan,Manager,85941.00,33
-S006,Tammy Simmons,Barista,30748.00,34
-S007,Carla Hayden,Cleaner,25555.00,28
-S008,Christopher Jenkins,Cleaner,27563.00,24
-S009,Timothy Gordon,Manager,88088.00,30
-S010,Amanda Bennett,Manager,88543.00,21
+S001,Craig Thomas,Cashier,34619.00,26
+S002,William Cook,Cashier,29634.00,40
+S003,Kathy Montgomery,Cook,33695.00,23
+S004,Rodney Harris,Barista,31016.00,40
+S005,Shawn Charles,Cook,32301.00,22
+S006,Paul Smith,Manager,80508.00,28
+S007,Timothy Diaz,Manager,89163.00,36
+S008,Calvin Anderson,Cook,32052.00,25
+S009,Donna Martinez,Manager,89829.00,38
+S010,Michael Bailey,Cleaner,25217.00,20

@@ -70,82 +70,112 @@ with open('tables/staff.csv', mode='w', newline='') as file:
 End
 """
 
-products = [
-    # Milk Teas
-    (1, "Milk Tea", "Classic Milk Tea", "", 6.99, True),
-    (2, "Milk Tea", "Taro Tea", "", 6.99, True),
-    (3, "Milk Tea", "Matcha Tea", "", 7.49, True),
-    (4, "Milk Tea", "Chocolate Fondue Tea", "", 7.99, True),
-    (5, "Milk Tea", "Caremel Nougat Tea", "", 7.99, True),
-    (6, "Milk Tea", "CUSTOM TEA", "", 7.99, True),
+# products = [
+#     # Milk Teas
+#     (1, "Milk Tea", "Classic Milk Tea", "", 6.99, True),
+#     (2, "Milk Tea", "Taro Tea", "", 6.99, True),
+#     (3, "Milk Tea", "Matcha Tea", "", 7.49, True),
+#     (4, "Milk Tea", "Chocolate Fondue Tea", "", 7.99, True),
+#     (5, "Milk Tea", "Caremel Nougat Tea", "", 7.99, True),
+#     (6, "Milk Tea", "CUSTOM TEA", "", 7.99, True),
 
-    # Fruit Teas
-    (7, "Fruit Tea", "Apple Tea", "", 7.49, True),
-    (8, "Fruit Tea", "Peach Tea", "", 7.99, True),
-    (9, "Fruit Tea", "Lemon Tea", "", 6.99, True),
-    (10, "Fruit Tea", "Green Tea", "", 6.99, True),
-    (11, "Fruit Tea", "Rasberry Tea", "", 7.99, True),
-    (12, "Fruit Tea", "Orange Tea", "", 6.99, True),
-    (13, "Fruit Tea", "Fruity Boba Tea", "", 7.49, True),
-    (14, "Fruit Tea", "Cherry Cosmo Tea", "", 7.99, True),
-    (15, "Fruit Tea", "Darjelinge Quince Tea", "", 7.49, True),
-    (16, "Fruit Tea", "Hibiscus Blossom Tea", "", 7.99, True),
-    (17, "Fruit Tea", "Honey Hojicha Tea", "", 7.99, True),
-    (18, "Fruit Tea", "Belgian Mint Tea", "", 7.99, True),
-    (19, "Fruit Tea", "Apricot Amaretto Tea", "", 7.49, True),
+#     # Fruit Teas
+#     (7, "Fruit Tea", "Apple Tea", "", 7.49, True),
+#     (8, "Fruit Tea", "Peach Tea", "", 7.99, True),
+#     (9, "Fruit Tea", "Lemon Tea", "", 6.99, True),
+#     (10, "Fruit Tea", "Green Tea", "", 6.99, True),
+#     (11, "Fruit Tea", "Rasberry Tea", "", 7.99, True),
+#     (12, "Fruit Tea", "Orange Tea", "", 6.99, True),
+#     (13, "Fruit Tea", "Fruity Boba Tea", "", 7.49, True),
+#     (14, "Fruit Tea", "Cherry Cosmo Tea", "", 7.99, True),
+#     (15, "Fruit Tea", "Darjelinge Quince Tea", "", 7.49, True),
+#     (16, "Fruit Tea", "Hibiscus Blossom Tea", "", 7.99, True),
+#     (17, "Fruit Tea", "Honey Hojicha Tea", "", 7.99, True),
+#     (18, "Fruit Tea", "Belgian Mint Tea", "", 7.99, True),
+#     (19, "Fruit Tea", "Apricot Amaretto Tea", "", 7.49, True),
 
-    # Hot Teas
-    (20, "Hot Tea", "Camamile Tea", "", 6.99, True),
-    (21, "Hot Tea", "Earl Grey Tea", "", 7.99, True),
-    (22, "Hot Tea", "Ulong Tea", "", 7.99, True),
-    (23, "Hot Tea", "Peppermint Tea", "", 7.49, True),
-    (24, "Hot Tea", "Black Tea", "", 7.99, True),
-    (25, "Hot Tea", "Rooibos Tea", "", 7.99, True),
-]
+#     # Hot Teas
+#     (20, "Hot Tea", "Camamile Tea", "", 6.99, True),
+#     (21, "Hot Tea", "Earl Grey Tea", "", 7.99, True),
+#     (22, "Hot Tea", "Ulong Tea", "", 7.99, True),
+#     (23, "Hot Tea", "Peppermint Tea", "", 7.49, True),
+#     (24, "Hot Tea", "Black Tea", "", 7.99, True),
+#     (25, "Hot Tea", "Rooibos Tea", "", 7.99, True),
+# ]
 
-"""
-Writing Products File
-"""
-with open('tables/products.csv', 'w', newline='') as productFile:
-    writer = csv.writer(productFile)
-    writer.writerow(['product_id', 'category', 'name', 'description', 'base_price', 'is_active'])
-    writer.writerows(products)
+# """
+# Writing Products File
+# """
+# with open('tables/products.csv', 'w', newline='') as productFile:
+#     writer = csv.writer(productFile)
+#     writer.writerow(['product_id', 'category', 'name', 'description', 'base_price', 'is_active'])
+#     writer.writerows(products)
 
 """
 Writing Ingredients file.
 """
 
-teas = [
-    (0, "Taro Mix", 300.00, "gram", False),
-    (1, "Black Mix", 500.00, "grams", False),
-    (2, "Apple Mix", 500.00, "grams", False),
-    (3, "Peach Mix", 500.00, "grams", False),
-    (4, "Lemon Mix", 500.00, "grams", False),
-    (5, "Green Mix", 500.00, "grams", False),
-    (6, "Rasberry Mix", 500.00, "grams", False),
-    (7, "Orange Mix", 500.00, "grams", False),
-    (8, "Matcha Mix", 500.00, "grams", False),
-    (9, "Camamile Mix", 500.00, "grams", False),
-    (10, "Peppermint Mix", 500.00, "grams", False),
-    (11, "Honey Mix", 500.00, "grams", False),
-    (12, "Ulong Mix", 500.00, "grams", False),
-    (13, "Rooibos Mix", 500.00, "grams", False),
-    (14, "Caremel Mix", 500.00, "grams", False),
-    (15, "Chocolate Mix", 500.00, "grams", False),
-    (16, "Cherry Mix", 500.00, "grams", False),
-    (17, "Milk", 2000.00, "ml", True),
-    (18, "Pearl Tapioca", 50.00, "packets", False),
-    (19, "Assorted Fruit Jellies", 50.00, "packets", False),
-    (20, "Candy Topping", 50.00, "packets", False),
-]
+# teas = [
+#     (0, "Taro Mix", 300.00, "gram", False),
+#     (1, "Black Mix", 500.00, "grams", False),
+#     (2, "Apple Mix", 500.00, "grams", False),
+#     (3, "Peach Mix", 500.00, "grams", False),
+#     (4, "Lemon Mix", 500.00, "grams", False),
+#     (5, "Green Mix", 500.00, "grams", False),
+#     (6, "Rasberry Mix", 500.00, "grams", False),
+#     (7, "Orange Mix", 500.00, "grams", False),
+#     (8, "Matcha Mix", 500.00, "grams", False),
+#     (9, "Camamile Mix", 500.00, "grams", False),
+#     (10, "Peppermint Mix", 500.00, "grams", False),
+#     (11, "Honey Mix", 500.00, "grams", False),
+#     (12, "Ulong Mix", 500.00, "grams", False),
+#     (13, "Rooibos Mix", 500.00, "grams", False),
+#     (14, "Caremel Mix", 500.00, "grams", False),
+#     (15, "Chocolate Mix", 500.00, "grams", False),
+#     (16, "Cherry Mix", 500.00, "grams", False),
+#     (17, "Milk", 2000.00, "ml", True),
+#     (18, "Pearl Tapioca", 50.00, "packets", False),
+#     (19, "Assorted Fruit Jellies", 50.00, "packets", False),
+#     (20, "Candy Topping", 50.00, "packets", False),
+# ]
 
-with open('tables/ingredients.csv', 'w', newline='') as ingred:
+# with open('tables/ingredients.csv', 'w', newline='') as ingred:
     
-    writer = csv.writer(ingred)
-    writer.writerow(['ingredient_id', 'name', 'quantity_in_stock', 'unit', 'needs_restocking'])
+#     writer = csv.writer(ingred)
+#     writer.writerow(['ingredient_id', 'name', 'quantity_in_stock', 'unit', 'needs_restocking'])
 
-    writer.writerows(teas)
+#     writer.writerows(teas)
 
+# updated products with 'categories' replacing 'temperature'
+products = [
+    (1, "Classic Milk Tea"      , 6.99, 'milk', '1'    , '21'     , '18'      , '0.50'    , '1', '1'), # 1 for 1 scoop
+    (2, "Apple Tea"             , 7.49, 'fruit' , '2'    , '5'      , '0'      , '0.25'    , '0', '2'),
+    (3, "Peach Tea"             , 7.99, 'fruit', '3'    , '5'      , '0'      , '0.25'    , '0', '2'),
+    (4, "Lemon Tea"             , 6.99, 'fruit', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
+    (5, "Green Tea"             , 6.99, 'hot', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
+    (6, "Rasberry Tea"          , 7.99, 'fruit', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
+    (7, "Matcha Tea"            , 7.49, 'milk', '8'    , '21'     , '18'      , '0.00'    , '1', '0'),
+    (8, "Orange Tea"            , 6.99, 'fruit', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
+    (9, "Fruity Boba Tea"       , 7.49, 'fruit', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
+    (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '0'     , '17'      , '0.25'    , '0', '0'),
+    (11, "Earl Grey Tea"        , 7.99, 'hot' , '1'    , '9'      , '0'      , '0.00'    , '0', '0'),
+    (12, "Taro Tea"             , 6.99, 'milk' , '22'   , '21'     , '18'      , '0.50'    , '0', '0'),
+    (13, "Ulong Tea"            , 7.99, 'hot' , '12'   , '0'     , '17'      , '0.00'    , '0', '0'),
+    (14, "Peppermint Tea"       , 7.49, 'hot' , '10'   , '0'      , '20'      , '0.00'    , '2', '1'),
+    (15, "Black Tea"            , 7.99, 'hot' , '1'    , '0'     , '17'      , '0.00'    , '0', '0'),
+    (16, "Rooibos Tea"          , 7.99, 'hot' , '1'    , '5'      , '0'      , '0.00'    , '1', '1'),
+    (17, "Apricot Amaretto Tea" , 7.49, 'fruit' , '15'   , '14'     , '10'      , '0.00'    , '0', '0'),
+    (18, "Belgian Mint Tea"     , 7.99, 'hot', '10'   , '6'      , '0'      , '0.00'    , '1', '1'),
+    (19, "Caremel Nougat Tea"   , 7.99, 'milk' , '14'   , '1'      , '15'      , '0.25'    , '1', '0'),
+    (20, "Cherry Cosmo Tea"     , 7.99, 'fruit', '16'   , '9'      , '14'      , '0.00'    , '0', '1'),
+    (21, "Chocolate Fondue Tea" , 7.99, 'milk' , '15'   , '11'     , '21'      , '0.50'    , '1', '0'),
+    (22, "Darjelinge Quince Tea", 7.49, 'hot', '8'    , '9'      , '0'      , '0.00'    , '1', '1'),
+    (23, "Hibiscus Blossom Tea" , 7.99, 'fruit' , '10'   , '9'      , '0'      , '0.00'    , '1', '1'),
+    (24, "Honey Hojicha Tea"    , 7.99, 'fruit', '11'   , '5'      , '12'      , '0.00'    , '1', '1'),
+    (25, "CUSTOM TEA"           , 7.99, 'milk', '17'   , '17'     , '17'      , '0.00'    , '0', '0'), 
+    # Default values for the custom tea, the staff wll construct this on their own if necessary, but 
+    # will be instructed to do so infrequently.
+]
 
 """
 Writing Orders table and Items table
@@ -172,7 +202,6 @@ currentDate = startDate
 sizes = ['Small', 'Medium', 'Large', 'Bucees_Large']
 sugar_or_ice = ['0', '50', '75', '100']
 toppings_options = ['Boba','Jelly','Pudding','None']
-status_options = ["Completed","Pending"]
 
 items   = []
 orderID = 1
@@ -205,7 +234,6 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
         second = random.randint(0, 59)
         order_datetime = datetime.combine(currentDate.date(), datetime.min.time()) + timedelta(hours=hour, minutes=minute, seconds=second)
 
-        status = random.choice(status_options)
         numItems = random.randint(1, 5)
         totalPrice = 0
         order_items_for_this_order = []
@@ -213,7 +241,7 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
         for _ in range(numItems):
             prd = random.choice(products)
             productID = prd[0]
-            base_price = prd[4]
+            base_price = prd[2]
 
             quantity = random.randint(1,3)
             size = random.choice(sizes)
@@ -258,13 +286,14 @@ while (totalRevenue < revenueGoal or currentDate <= endDate):
             order_items_for_this_order.append(item)
             itemID += 1
 
-        tip = round(random.uniform(0,5),2) if status == "Completed" else 0.00
+        tip = round(random.uniform(0,5),2)
         special_notes = fake.sentence() if random.random() < 0.3 else ""
 
+        month = int(order_datetime.isoformat(sep=' ').split(' ')[0].split('-')[1])
         order = [
             orderID,
             order_datetime.isoformat(sep=' '),
-            status,
+            month,
             round(totalPrice,2),
             tip,
             special_notes
@@ -281,45 +310,13 @@ writer.writerow(['item_id','order_id','product_id','quantity','size','sugar_leve
 writer.writerows(items)
 
 writer = csv.writer(ordersTable)
-writer.writerow(['order_id','order_time','status','total_price','tip','special_notes'])
+writer.writerow(['order_id','order_time','month','total_price','tip','special_notes'])
 writer.writerows(orders)
 
 ordersTable.close()
 itemsTable.close()
 
 print(f'TOTAL REVENUE: {totalRevenue:.02f}\nTOTAL WEEKS: 39\nTOTAL ORDERS: {len(orders)}\nTOTAL ITEMS ORDERED: {len(items)}\nPEAK DAYS: {peakDays}')
-
-# updated products with 'categories' replacing 'temperature'
-
-products = [
-    (1, "Classic Milk Tea"      , 6.99, 'milk', '1'    , '21'     , '18'      , '0.50'    , '1', '1'), # 1 for 1 scoop
-    (2, "Apple Tea"             , 7.49, 'fruit' , '2'    , '5'      , '0'      , '0.25'    , '0', '2'),
-    (3, "Peach Tea"             , 7.99, 'fruit', '3'    , '5'      , '0'      , '0.25'    , '0', '2'),
-    (4, "Lemon Tea"             , 6.99, 'fruit', '4'    , '4'      , '0'      , '0.00'    , '0', '2'),
-    (5, "Green Tea"             , 6.99, 'hot', '5'    , '5'      , '0'      , '0.00'    , '0', '0'),
-    (6, "Rasberry Tea"          , 7.99, 'fruit', '6'    , '0'     , '17'      , '0.00'    , '0', '2'),
-    (7, "Matcha Tea"            , 7.49, 'milk', '8'    , '21'     , '18'      , '0.00'    , '1', '0'), #NOTE: this should be milk, not cold. manually changed in db for now
-    (8, "Orange Tea"            , 6.99, 'fruit', '7'    , '0'     , '19'      , '0.00'    , '1', '0'),
-    (9, "Fruity Boba Tea"       , 7.49, 'fruit', '3'    , '5'      , '19'      , '0.50'    , '1', '0'),
-    (10, "Camamile Tea"         , 6.99, 'hot' , '9'    , '0'     , '17'      , '0.25'    , '0', '0'),
-    (11, "Earl Grey Tea"        , 7.99, 'hot' , '1'    , '9'      , '0'      , '0.00'    , '0', '0'),
-    (12, "Taro Tea"             , 6.99, 'milk' , '22'   , '21'     , '18'      , '0.50'    , '0', '0'),
-    (13, "Ulong Tea"            , 7.99, 'hot' , '12'   , '0'     , '17'      , '0.00'    , '0', '0'),
-    (14, "Peppermint Tea"       , 7.49, 'hot' , '10'   , '0'      , '20'      , '0.00'    , '2', '1'),
-    (15, "Black Tea"            , 7.99, 'hot' , '1'    , '0'     , '17'      , '0.00'    , '0', '0'),
-    (16, "Rooibos Tea"          , 7.99, 'hot' , '1'    , '5'      , '0'      , '0.00'    , '1', '1'),
-    (17, "Apricot Amaretto Tea" , 7.49, 'fruit' , '15'   , '14'     , '10'      , '0.00'    , '0', '0'),
-    (18, "Belgian Mint Tea"     , 7.99, 'hot', '10'   , '6'      , '0'      , '0.00'    , '1', '1'),
-    (19, "Caremel Nougat Tea"   , 7.99, 'milk' , '14'   , '1'      , '15'      , '0.25'    , '1', '0'),
-    (20, "Cherry Cosmo Tea"     , 7.99, 'fruit', '16'   , '9'      , '14'      , '0.00'    , '0', '1'),
-    (21, "Chocolate Fondue Tea" , 7.99, 'milk' , '15'   , '11'     , '21'      , '0.50'    , '1', '0'),
-    (22, "Darjelinge Quince Tea", 7.49, 'hot', '8'    , '9'      , '0'      , '0.00'    , '1', '1'),
-    (23, "Hibiscus Blossom Tea" , 7.99, 'fruit' , '10'   , '9'      , '0'      , '0.00'    , '1', '1'),
-    (24, "Honey Hojicha Tea"    , 7.99, 'fruit', '11'   , '5'      , '12'      , '0.00'    , '1', '1'),
-    (25, "CUSTOM TEA"           , 7.99, 'milk', '17'   , '17'     , '17'      , '0.00'    , '0', '0'), 
-    # Default values for the custom tea, the staff wll construct this on their own if necessary, but 
-    # will be instructed to do so infrequently.
-]
 
 # added new ingredients to 1- 16, 18, 21-23 (mostly just adding water to appropriate teas)
 

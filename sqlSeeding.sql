@@ -7,13 +7,13 @@ CREATE TABLE ingredients(
     numServings INT
 );
 
-\copy ingredients from './ingredients.csv' CSV HEADER
+\copy ingredients from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\ingredients.csv' CSV HEADER
 
 CREATE TABLE products(
     product_id INT PRIMARY KEY,
     product_name TEXT,
     price DECIMAL,
-    temperature TEXT,
+    category TEXT,
     flavor INT,
     flavor_2 INT,
     flavor_3 INT,
@@ -22,7 +22,7 @@ CREATE TABLE products(
     sugar INT
 );
 
-\copy products from './products.csv' CSV HEADER
+\copy products from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\products.csv' CSV HEADER
 
 CREATE TABLE inventory(
     inv_item_id INT PRIMARY KEY,
@@ -31,19 +31,19 @@ CREATE TABLE inventory(
     numServings INT
 );
 
-\copy inventory from './inventory.csv' CSV HEADER
+\copy inventory from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\inventory.csv' CSV HEADER
 
 
 CREATE TABLE orders (
     order_id        SERIAL PRIMARY KEY,
     order_time      TIMESTAMP NOT NULL,
-    status          VARCHAR(20) NOT NULL CHECK (status IN ('Completed', 'Pending')),
+    month           SMALLINT NOT NULL CHECK (month >= 1 AND month <= 12),
     total_price     NUMERIC(10,2) NOT NULL,
     tip             NUMERIC(10,2) DEFAULT 0.00,
     special_notes   VARCHAR(255)
 );
 
-\copy orders from './orders.csv' CSV HEADER
+\copy orders from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\orders.csv' CSV HEADER
 
 CREATE TABLE items (
     item_id SERIAL PRIMARY KEY,      
@@ -60,7 +60,7 @@ CREATE TABLE items (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE RESTRICT
 );
 
-\copy items from './items.csv' CSV HEADER
+\copy items from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\items.csv' CSV HEADER
 
 
 CREATE TABLE staff(
@@ -71,7 +71,7 @@ CREATE TABLE staff(
     hours_worked INT
 );
 
-\copy staff from './staff.csv' CSV HEADER
+\copy staff from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\staff.csv' CSV HEADER
 
 
 -- ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
