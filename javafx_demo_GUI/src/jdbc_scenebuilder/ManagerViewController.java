@@ -151,6 +151,14 @@ public class ManagerViewController {
         return data;
     }
 
+    @FXML
+    private void addItem(){
+        String sqlAddItem = "INSERT INTO products (product_id, product_name, price, category, flavor, flavor_2, flavor_3, milk, cream, sugar) " +
+                "VALUES (101, 'Thai Milk Tea', 4.50, 'Milk Tea', 1, NULL, NULL, 1.0, 0, 75);";
+        runQuery(sqlAddItem);
+        initialize();
+    }
+
     private void populateLineChart(List<Map<String, String>> data) {
         lineChart.getData().clear();
         if (data.isEmpty()) {

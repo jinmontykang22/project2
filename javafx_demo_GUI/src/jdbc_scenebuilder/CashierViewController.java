@@ -1,21 +1,30 @@
 package jdbc_scenebuilder;
-
-import java.sql.*;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import jdbc_scenebuilder.ViewApp;
+import jdbc_scenebuilder.dbSetup;
+import javafx.event.ActionEvent;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class CashierViewController {
 
     @FXML
     private Button queryButton; //match the fx:id value from Scene Builder
-    
+
     @FXML
     private TextArea resultArea; //match the fx:id value from Scene Builder
-    
+
     @FXML
     private Button closeButton; //match the fx:id value from Scene Builder
 
@@ -45,79 +54,90 @@ public class CashierViewController {
     private Button drinkBtn12; //match the fx:id value from Scene Builder
 
     @FXML
+    private Button categoryBtn1;
+
+    @FXML
+    private Button categoryBtn2;
+
+    @FXML
+    private Button categoryBtn3;
+
+    @FXML
     private TextArea orderSumArea; //match the fx:id value from Scene Builder
 
     @FXML
     private void switchToManagerView(ActionEvent event) throws Exception {
         ViewApp.changeScene("./resources/manager-view.fxml");
     }
-    
+
+
     private static final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu/gang_52_db"; //database location
-    
+
+    private Button[] drinkButtons;
+    private Button[] categoryButtons;
+    private String[] categories;
+
     // This method runs automatically when the FXML loads
     @FXML
     public void initialize() {
-        // Set up what happens when button is clicked
-        queryButton.setOnAction(event -> runQuery("SELECT product_name FROM products"));
+        //ordering of these initialization statements not very clean but it works for now
+        drinkButtons = new Button[]{drinkBtn1, drinkBtn2, drinkBtn3, drinkBtn4, drinkBtn5, drinkBtn6,
+                drinkBtn7, drinkBtn8, drinkBtn9, drinkBtn10, drinkBtn11, drinkBtn12};
+
+        categoryButtons = new Button[]{categoryBtn1, categoryBtn2, categoryBtn3};
+
+        categories = new String[]{"hot", "milk", "fruit"};
+
         closeButton.setOnAction(event -> closeWindow());
 
-        //drinkBtn1.setText("Classic Milk Tea");
+        Map<String, List<String>> prod_cat_map = create_product_category_map("SELECT product_name, category FROM products");
 
-        String productNames = runQuery("SELECT product_name FROM products");
-        for(int i = 1; i < 26; i++) {
-            String name = productNames.split(",")[i-1];
-            switch(i) {
-                case 1: drinkBtn1.setText(name); break;
-                case 2: drinkBtn2.setText(name); break;
-                case 3: drinkBtn3.setText(name); break;
-                case 4: drinkBtn4.setText(name); break;
-                case 5: drinkBtn5.setText(name); break;
-                case 6: drinkBtn6.setText(name); break;
-                case 7: drinkBtn7.setText(name); break;
-                case 8: drinkBtn8.setText(name); break;
-                case 9: drinkBtn9.setText(name); break;
-                case 10: drinkBtn10.setText(name); break;
-                case 11: drinkBtn11.setText(name); break;
-                case 12: drinkBtn12.setText(name); break;
-                default: break; //do nothing
-            }
-            
+        for (Button b : drinkButtons) {
+            b.setText("");
+            b.setVisible(false);
+            b.setOnAction(event -> selectDrinkBtn(b.getText()));
         }
 
-        //SELECT product_name FROM products WHERE product_id = i
+        for (int i = 0; i < categoryButtons.length; i++) {
+            int lambda_i = i; //needs this for some reason: local variables referenced from a lambda expression must be final or effectively final
+            categoryButtons[i].setText(categories[i].toUpperCase());
+            categoryButtons[i].setOnAction(event -> populateByCategory(categories[lambda_i], prod_cat_map));
+        }
 
-        drinkBtn1.setOnAction(event -> selectDrinkBtn(drinkBtn1.getText()));
-        drinkBtn2.setOnAction(event -> selectDrinkBtn(drinkBtn2.getText()));
-        drinkBtn3.setOnAction(event -> selectDrinkBtn(drinkBtn3.getText()));
-        drinkBtn4.setOnAction(event -> selectDrinkBtn(drinkBtn4.getText()));
-        drinkBtn5.setOnAction(event -> selectDrinkBtn(drinkBtn5.getText()));
-        drinkBtn6.setOnAction(event -> selectDrinkBtn(drinkBtn6.getText()));
-        drinkBtn7.setOnAction(event -> selectDrinkBtn(drinkBtn7.getText()));
-        drinkBtn8.setOnAction(event -> selectDrinkBtn(drinkBtn8.getText()));
-        drinkBtn9.setOnAction(event -> selectDrinkBtn(drinkBtn9.getText()));
-        drinkBtn10.setOnAction(event -> selectDrinkBtn(drinkBtn10.getText()));
-        drinkBtn11.setOnAction(event -> selectDrinkBtn(drinkBtn11.getText()));
-        drinkBtn12.setOnAction(event -> selectDrinkBtn(drinkBtn12.getText()));
+        populateByCategory(categories[0], prod_cat_map);
     }
 
-    //method to select a drink and add it to the Order Summary display
+    //on button click, adds the drink to the order summary text area
     private void selectDrinkBtn(String drinkBtnStr) {
         String drinkName = drinkBtnStr;
-        String drinkPrice = "7.00"; //harcoded for demo purposes
+        //may be a little slow manually running queries every time to search for the price. Need to figure out how to store the prices locally
+        double drinkPrice = runQuery("SELECT price FROM products WHERE product_name = '" + drinkName + "'", "price");
 
-        // Append the selected drink to the Order Summary
         String currentText = orderSumArea.getText();
         orderSumArea.setText(currentText + drinkName + " - " + drinkPrice + "\n");
     }
-    
-    // Your method to run the database query
-    private String runQuery(String sqlStatement) {
-        resultArea.setText("Query will run here...");
 
+    //populates the drink buttons based on the selected category
+    private void populateByCategory(String category, Map<String, List<String>> product_category_map) {
+        List<String> product_names = product_category_map.get(category);
+
+        for (Button b : drinkButtons) {
+            b.setText("");
+            b.setVisible(false);
+        }
+
+        for (int i = 0; i < product_names.size() && i < drinkButtons.length; i++) {
+            drinkButtons[i].setText(product_names.get(i));
+            drinkButtons[i].setVisible(true);
+        }
+    }
+
+    // Your method to run the database query (for now, specifically for getting the price of a drink)
+    private double runQuery(String sqlStatement, String columnLabel) {
         try {
             // Get database creditials
             dbSetup my = new dbSetup();
- 
+
             // Build the connection
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd);
@@ -126,35 +146,77 @@ public class CashierViewController {
             Statement stmt = conn.createStatement();
 
             // Run sql query
-            //String sqlStatement = "SELECT product_name FROM products";
             ResultSet rs = stmt.executeQuery(sqlStatement);
 
             // Output result
             String result = "";
             while (rs.next()) {
-                result += rs.getString("product_name") + ",";
+                result += rs.getString(columnLabel) + ",";
             }
-
-            // Display result
-            //resultArea.setText(result);
 
             // Close connection
             rs.close();
             stmt.close();
             conn.close();
 
-            return result;
+            return Double.parseDouble(result.replace(",", ""));
 
         } catch (Exception e) {
             resultArea.setText("Error connecting to database:\n" + e.getMessage());
             e.printStackTrace();
             System.exit(0);
 
-            return "ERROR";
+            return -1;
         }
     }
 
-    private void closeWindow() { 
+    // Creates a map of product names to their categories. used in various places
+    private Map<String, List<String>> create_product_category_map(String sqlStatement) {
+        try {
+            // Get database creditials
+            dbSetup my = new dbSetup();
+
+            // Build the connection
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd);
+
+            // Create statement
+            Statement stmt = conn.createStatement();
+
+            // Run sql query
+            ResultSet rs = stmt.executeQuery(sqlStatement);
+
+            List<String[]> product_category = new ArrayList<>(); //no tuple in java ;-;
+            while (rs.next()) {
+                product_category.add(new String[]{rs.getString("product_name"), rs.getString("category")});
+            }
+
+            Map<String, List<String>> product_category_map = new HashMap<>();
+            for (String cat : categories) {
+                product_category_map.put(cat, new ArrayList<>());
+            }
+
+            for (String[] pc : product_category) {
+                product_category_map.get(pc[1]).add(pc[0]);
+            }
+
+            // Close connection
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            return product_category_map;
+
+        } catch (Exception e) {
+            orderSumArea.setText("Error connecting to database:\n" + e.getMessage());
+            e.printStackTrace();
+            System.exit(0);
+
+            return null;
+        }
+    }
+
+    private void closeWindow() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }

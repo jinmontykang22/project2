@@ -44,8 +44,9 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                  <SplitPane cacheShape="false" centerShape="false" dividerPositions="0.0947136563876652" orientation="VERTICAL" prefHeight="456.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane cacheShape="false" centerShape="false" dividerPositions="0.0947136563876652, 0.5" orientation="VERTICAL" prefHeight="456.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
+                        <Button mnemonicParsing="false" onAction="#addItem" text="Add Product" />
                       <AnchorPane maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0">
                            <children>
                               <Text fill="#8a7f7f" strokeType="OUTSIDE" strokeWidth="0.0" text="Right click to change views..." textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="7.0" />
