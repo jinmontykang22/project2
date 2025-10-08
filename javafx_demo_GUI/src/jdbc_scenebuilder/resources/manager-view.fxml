@@ -48,8 +48,8 @@
                     <items>
                         <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#addItem" text="Add Item on Menu" />
-                              <Button mnemonicParsing="false" onAction="#updateItem" text="Update Item on Menu" />
+                              <Button mnemonicParsing="false" onAction="#addProduct" text="Add Item on Menu" />
+                              <Button mnemonicParsing="false" onAction="#updateProduct" text="Update Item on Menu" />
                            </children>
                         </HBox>
                         <HBox maxHeight="30.0" prefHeight="10.0" prefWidth="200.0">

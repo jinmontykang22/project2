@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 //javac --module-path lib --add-modules javafx.controls,javafx.fxml -d bin src/jdbc_scenebuilder/*.java
 //then copy resources folder to bin if changed in SceneBuilder
 //java "-Djava.library.path=lib/bin" --module-path lib --add-modules javafx.controls,javafx.fxml -cp "bin;lib/*" jdbc_scenebuilder.ViewApp
-public class ViewApp extends Application {
+public class main extends Application {
     private static Stage primaryStage;
 
     @Override
@@ -25,7 +25,7 @@ public class ViewApp extends Application {
     }
 
     public static void changeScene(String fxml) throws Exception {
-        FXMLLoader loader = new FXMLLoader(ViewApp.class.getResource(fxml));
+        FXMLLoader loader = new FXMLLoader(main.class.getResource(fxml));
         Scene scene = new Scene(loader.load());
         primaryStage.setScene(scene);
     }

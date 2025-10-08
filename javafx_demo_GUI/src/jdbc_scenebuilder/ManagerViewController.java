@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import jdbc_scenebuilder.dbSetup;
 
 public class ManagerViewController {
 
@@ -45,7 +44,7 @@ public class ManagerViewController {
 
     @FXML
     private void switchToCashierView(ActionEvent event) throws Exception {
-        ViewApp.changeScene("./resources/cashier-view.fxml");
+        main.changeScene("./resources/cashier-view.fxml");
     }
 
     // This method runs automatically when the FXML loads
@@ -126,10 +125,10 @@ public class ManagerViewController {
         String csvResult = runQuery("SELECT * FROM inventory");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
         populateTableView(csvResult);
-        numericColumn = "order_id";
-        categoryColumn = "size";
-        yAxisName = "Items";
-        xAxisName = "Order";
+        numericColumn = "units_remaining";
+        categoryColumn = "name";
+        yAxisName = "Units Remaining";
+        xAxisName = "Item Name";
         populateBarChart(data);
     }
 
@@ -155,8 +154,9 @@ public class ManagerViewController {
     }
 
     @FXML
-    private void addItem() {
+    private void addProduct() {
         try {
+            setMenu();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-product.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add Product");
@@ -169,7 +169,7 @@ public class ManagerViewController {
     }
 
     @FXML
-    private void updateItem() {
+    private void updateProduct() {
         try {
             // Get selected row from table
             ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
@@ -208,6 +208,7 @@ public class ManagerViewController {
     @FXML
     private void addInventory() {
         try {
+            setInventory();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-inventory.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add Inventory");
@@ -257,6 +258,7 @@ public class ManagerViewController {
     @FXML
     private void addEmployee() {
         try {
+            setStaff();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-employee.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add Employee");
@@ -380,11 +382,14 @@ public class ManagerViewController {
         for (Map<String, String> row : data) {
             String category = row.get(categoryColumn);
             String valueStr = row.get(numericColumn);
+            if (valueStr == null || valueStr.isEmpty() || valueStr.equalsIgnoreCase("none")) {
+                continue;
+            }
             try {
                 double value = Double.parseDouble(valueStr);
                 series.getData().add(new XYChart.Data<>(category, value));
             } catch (NumberFormatException e) {
-                System.err.println("Invalid number format for " + valueStr);
+                System.err.println("Invalid number format for value: " + valueStr);
             }
         }
         barChart.getData().add(series);
@@ -432,41 +437,36 @@ public class ManagerViewController {
         StringBuilder result = new StringBuilder();
 
         try {
-            // Load PostgreSQL driver
             Class.forName("org.postgresql.Driver");
+            try (Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd);
+                 Statement stmt = conn.createStatement()) {
 
-            // Establish connection
-            try (Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd)) {
-                // Create statement
-                try (Statement stmt = conn.createStatement()) {
-                    // Execute query
+                // Detect query type
+                if (sqlStatement.trim().toLowerCase().startsWith("select")) {
                     try (ResultSet rs = stmt.executeQuery(sqlStatement)) {
-                        // Get metadata to retrieve column information
                         ResultSetMetaData metaData = rs.getMetaData();
                         int columnCount = metaData.getColumnCount();
 
-                        // Append column headers
+                        // Append headers
                         for (int i = 1; i <= columnCount; i++) {
                             result.append(metaData.getColumnName(i));
-                            if (i < columnCount) {
-                                result.append(",");
-                            }
+                            if (i < columnCount) result.append(",");
                         }
                         result.append("\n");
 
-                        // Append data rows
+                        // Append rows
                         while (rs.next()) {
                             for (int i = 1; i <= columnCount; i++) {
                                 String value = rs.getString(i);
-                                // Handle null values
                                 result.append(value != null ? value : "none");
-                                if (i < columnCount) {
-                                    result.append(",");
-                                }
+                                if (i < columnCount) result.append(",");
                             }
                             result.append("\n");
                         }
                     }
+                } else {
+                    int affectedRows = stmt.executeUpdate(sqlStatement);
+                    result.append("Rows affected: ").append(affectedRows);
                 }
             }
         } catch (ClassNotFoundException e) {
