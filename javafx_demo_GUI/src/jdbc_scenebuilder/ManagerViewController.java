@@ -42,7 +42,7 @@ public class ManagerViewController {
 
     @FXML
     private void switchToCashierView(ActionEvent event) throws Exception {
-        ViewApp.changeScene("cashier-view.fxml");
+        ViewApp.changeScene("./resources/cashier-view.fxml");
     }
 
     // This method runs automatically when the FXML loads
@@ -66,6 +66,7 @@ public class ManagerViewController {
         xAxisName = "Category";
         populateBarChart(data);
     }
+
     @FXML
     public void setOrders() {
         String csvResult = runQuery("SELECT * FROM orders");
@@ -97,11 +98,13 @@ public class ManagerViewController {
         xAxisName = "Role";
         populateBarChart(data);
     }
+
     @FXML
     public void setIngredients() {
         barChart.getData().clear();
         populateTableView(runQuery("SELECT * FROM ingredients LIMIT 100"));
     }
+
     @FXML
     public void setItems() {
         // Return the last 1000 items added to the order table.
@@ -114,6 +117,7 @@ public class ManagerViewController {
         xAxisName = "Item";
         populateBarChart(data);
     }
+
     @FXML
     public void setInventory() {
         String csvResult = runQuery("SELECT * FROM inventory");

@@ -49,7 +49,7 @@ public class CashierViewController {
 
     @FXML
     private void switchToManagerView(ActionEvent event) throws Exception {
-        ViewApp.changeScene("manager-view.fxml");
+        ViewApp.changeScene("./resources/manager-view.fxml");
     }
     
     private static final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu/gang_52_db"; //database location
