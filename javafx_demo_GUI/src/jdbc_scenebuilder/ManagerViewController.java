@@ -162,7 +162,7 @@ public class ManagerViewController {
             stage.setTitle("Add Product");
             stage.setScene(new Scene(loader.load()));
             stage.showAndWait();  // wait until user closes the dialog
-            initialize();         // refresh the main table
+            setItems();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,7 +197,7 @@ public class ManagerViewController {
             );
 
             stage.showAndWait();
-            initialize(); // refresh table
+            setItems();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,7 +213,7 @@ public class ManagerViewController {
             stage.setTitle("Add Inventory");
             stage.setScene(new Scene(loader.load()));
             stage.showAndWait(); // Wait for user to finish
-            initialize();        // Refresh main table
+            setInventory();        // Refresh main table
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
@@ -246,11 +246,97 @@ public class ManagerViewController {
             );
 
             stage.showAndWait();
-            initialize(); // refresh table
+            setInventory();
 
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void addEmployee() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-employee.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Employee");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait();   // Wait until the dialog closes
+            setStaff();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void updateEmployee() {
+        try {
+            // Get selected row from your staff table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an employee to update.").showAndWait();
+                return;
+            }
+
+            // Load FXML for the update window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-employee.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Employee");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected employee data to the controller
+            UpdateEmployeeController controller = loader.getController();
+            controller.setEmployeeData(
+                    selectedRow.get(0),                      // staff_id
+                    selectedRow.get(1),                      // name
+                    selectedRow.get(2),                      // role
+                    Double.parseDouble(selectedRow.get(3)),  // salary
+                    Integer.parseInt(selectedRow.get(4))     // hours_worked
+            );
+
+            stage.showAndWait();
+            setStaff();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void removeEmployee() {
+        try {
+            // Get selected row from the staff table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an employee to remove.").showAndWait();
+                return;
+            }
+
+            String staffId = selectedRow.get(0);
+            String staffName = selectedRow.get(1);
+
+            // Confirm deletion
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Confirm Delete");
+            confirm.setHeaderText("Delete Employee");
+            confirm.setContentText("Are you sure you want to remove " + staffName + " (ID: " + staffId + ")?");
+
+            // Wait for user response
+            if (confirm.showAndWait().get() == ButtonType.OK) {
+                String sql = String.format("DELETE FROM staff WHERE staff_id = '%s';", staffId);
+
+                ManagerViewController db = new ManagerViewController();
+                db.runQuery(sql);
+
+                new Alert(Alert.AlertType.INFORMATION, "Employee removed successfully.").showAndWait();
+                setStaff();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error removing employee: " + e.getMessage()).showAndWait();
         }
     }
 
