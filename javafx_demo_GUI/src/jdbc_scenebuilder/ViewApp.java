@@ -15,7 +15,7 @@ public class ViewApp extends Application {
 
         primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-                "manager-view.fxml"));
+                "resources/manager-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         stage.setTitle("AWS PostgreSQL Query Example");
         stage.setScene(scene);
