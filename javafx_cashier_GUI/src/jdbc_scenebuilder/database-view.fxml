@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jdbc_scenebuilder.DatabaseController">
+   <children>
+      <Button fx:id="queryButton" mnemonicParsing="false" text="Display total_price" />
+      <Button fx:id="categoryBtn1" mnemonicParsing="false" text="Button" />
+      <Button fx:id="categoryBtn2" mnemonicParsing="false" text="Button" />
+      <Button fx:id="categoryBtn3" mnemonicParsing="false" text="Button" />
+      <TextArea fx:id="resultArea" editable="false" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="closeButton" mnemonicParsing="false" text="Close" />
+      <HBox alignment="CENTER" prefHeight="236.0" prefWidth="539.0">
+         <children>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="drinkBtn1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D1" />
+                  <Button fx:id="drinkBtn2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D2" GridPane.columnIndex="1" />
+                  <Button fx:id="drinkBtn4" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D4" GridPane.rowIndex="1" />
+                  <Button fx:id="drinkBtn5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="drinkBtn7" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D7" GridPane.rowIndex="2" />
+                  <Button fx:id="drinkBtn8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D8" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="drinkBtn3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D3" GridPane.columnIndex="2" />
+                  <Button fx:id="drinkBtn6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D6" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="drinkBtn9" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D9" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Button fx:id="drinkBtn10" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D10" GridPane.rowIndex="3" />
+                  <Button fx:id="drinkBtn11" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D11" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button fx:id="drinkBtn12" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="D12" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+               </children>
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
+            </GridPane>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
+               <children>
+                  <Label text="Order Summary" textAlignment="CENTER" />
+                  <TextArea fx:id="orderSumArea" prefHeight="200.0" prefWidth="200.0" promptText="I'll fill in as you select drinks..." wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+         <VBox.margin>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

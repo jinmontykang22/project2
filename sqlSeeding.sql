@@ -7,10 +7,10 @@ CREATE TABLE ingredients(
     numServings INT
 );
 
-\copy ingredients from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\ingredients.csv' CSV HEADER
+\copy ingredients from './tables/ingredients.csv' CSV HEADER
 
 CREATE TABLE products(
-    product_id INT PRIMARY KEY,
+    product_id SERIAL PRIMARY KEY,
     product_name TEXT,
     price DECIMAL,
     category TEXT,
@@ -22,16 +22,16 @@ CREATE TABLE products(
     sugar INT
 );
 
-\copy products from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\products.csv' CSV HEADER
+\copy products from './tables/products.csv' CSV HEADER
 
 CREATE TABLE inventory(
-    inv_item_id INT PRIMARY KEY,
+    inv_item_id SERIAL PRIMARY KEY,
     name TEXT, -- changed from 'name'
     units_remaining INT,
     numServings INT
 );
 
-\copy inventory from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\inventory.csv' CSV HEADER
+\copy inventory from './tables/inventory.csv' CSV HEADER
 
 
 CREATE TABLE orders (
@@ -45,7 +45,7 @@ CREATE TABLE orders (
     special_notes   VARCHAR(255)
 );
 
-\copy orders from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\orders.csv' CSV HEADER
+\copy orders from './tables/orders.csv' CSV HEADER
 
 CREATE TABLE items (
     item_id SERIAL PRIMARY KEY,      
@@ -61,7 +61,7 @@ CREATE TABLE items (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE RESTRICT
 );
 
-\copy items from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\items.csv' CSV HEADER
+\copy items from './tables/items.csv' CSV HEADER
 
 
 CREATE TABLE staff(
@@ -72,8 +72,12 @@ CREATE TABLE staff(
     hours_worked INT
 );
 
-\copy staff from 'C:\Users\aidan\OneDrive\Documents\School HW\CSCE 331\project2\project2\tables\staff.csv' CSV HEADER
+\copy staff from './tables/staff.csv' CSV HEADER
 
+SELECT setval(pg_get_serial_sequence('products', 'product_id'), COALESCE(MAX(product_id), 1)) FROM products;
+SELECT setval(pg_get_serial_sequence('inventory', 'inv_item_id'), COALESCE(MAX(inv_item_id), 1)) FROM inventory;
+SELECT setval(pg_get_serial_sequence('orders', 'order_id'), COALESCE(MAX(order_id), 1)) FROM orders;
+SELECT setval(pg_get_serial_sequence('items', 'item_id'), COALESCE(MAX(item_id), 1)) FROM items;
 
 -- ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
 --     inventory (inv_item_id INT PKEY, name TEXT, units_remaining INT, numServings INT),
