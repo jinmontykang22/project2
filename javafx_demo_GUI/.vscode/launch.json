@@ -6,7 +6,7 @@
         "name": "Launch JavaFX Application",
         "request": "launch",
         "mainClass": "jdbc_scenebuilder.DatabaseApp",
-        "vmArgs": "--module-path $C:\\Program Files\\Java\\javafx-sdk-25\\lib --add-modules javafx.controls,javafx.fxml -Djava.library.path=lib/bin -Dprism.order=sw"//idk if lib path is correct
+        "vmArgs": "--module-path $C:\\Program Files\\Java\\javafx-sdk-25\\lib --add-modules javafx.controls,javafx.fxml -Djava.library.path=lib/bin -Dprism.order=sw"
     }
     ]
 }
