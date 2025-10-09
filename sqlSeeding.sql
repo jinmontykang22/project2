@@ -36,8 +36,10 @@ CREATE TABLE inventory(
 
 CREATE TABLE orders (
     order_id        SERIAL PRIMARY KEY,
-    order_time      TIMESTAMP NOT NULL,
+    time            VARCHAR(255),
+    day             SMALLINT NOT NULL CHECK (day >= 1 AND day <= 31),
     month           SMALLINT NOT NULL CHECK (month >= 1 AND month <= 12),
+    year            INT NOT NULL CHECK (year >= 2020 AND year <= 2025),
     total_price     NUMERIC(10,2) NOT NULL,
     tip             NUMERIC(10,2) DEFAULT 0.00,
     special_notes   VARCHAR(255)
@@ -49,7 +51,6 @@ CREATE TABLE items (
     item_id SERIAL PRIMARY KEY,      
     order_id INT NOT NULL,           
     product_id INT NOT NULL,        
-    quantity INT NOT NULL CHECK (quantity > 0),
     size VARCHAR(20) NOT NULL CHECK (size IN ('Small','Medium','Large','Bucees_Large')),
     sugar_level VARCHAR(5) NOT NULL CHECK (sugar_level IN ('0','50','75','100')),
     ice_level VARCHAR(5) NOT NULL CHECK (ice_level IN ('0','50','75','100')),
