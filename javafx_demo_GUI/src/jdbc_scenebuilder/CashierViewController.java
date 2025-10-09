@@ -138,13 +138,16 @@ public class CashierViewController {
     private double itemPrice;
     private List<String> itemToppings;
 
-    private int orderID = 1;
-    private int itemID = 1;
+    private int orderID;
+    private int itemID;
     private List<Item> currentOrderItems;
 
     // This method runs automatically when the FXML loads
     @FXML
     public void initialize() {
+
+        orderID = Integer.parseInt(runQuery("SELECT MAX(order_id) FROM orders", "max").replace(",", "")) + 1;
+        itemID = Integer.parseInt(runQuery("SELECT MAX(item_id) FROM items", "max").replace(",", "")) + 1;
         //ordering of these initialization statements not very clean but it works for now
         drinkButtons = new Button[]{drinkBtn1, drinkBtn2, drinkBtn3, drinkBtn4, drinkBtn5, drinkBtn6,
                 drinkBtn7, drinkBtn8, drinkBtn9, drinkBtn10, drinkBtn11, drinkBtn12};
@@ -197,6 +200,7 @@ public class CashierViewController {
 
         populateByCategory(categories[0], prod_cat_map);
         customizationPopUp1.setVisible(false);
+        orderSumArea.setText(orderID + "\n");
     }
 
     private void selectSizeBtn(String sizeBtnStr) {
@@ -246,22 +250,28 @@ public class CashierViewController {
         double orderTotal = 0.0;
         for (Item i : currentOrderItems) {
             orderTotal += i.getTotalPrice();
-            String sizeEscaped = i.getSize().replace("'", "''"); //solely due to the "Bucee's" size (can we not use quotes in sql entries please)
-            String sqlStatement = "INSERT INTO test_items (item_id, order_id, product_id, quantity, size, sugar_level, ice_level, toppings, price) VALUES (" +
-                    i.getItemID() + ", " + i.getOrderID() + ", " + i.getProductID() + ", 1, '" + sizeEscaped + "', '" +
-                    i.getSugarLevel() + "', '" + i.getIceLevel() + "', '" + i.getToppings() + "', " + i.getTotalPrice() + ");";
-            runUpdate(sqlStatement);
         }
         Order newOrder = new Order(orderID, orderTotal, 0.0, ""); 
         //inserts into a dummy table for now
-        String sqlStatement = "INSERT INTO test_orders (order_id, order_time, month, total_price, tip, special_notes) VALUES (" +
-                newOrder.getOrderID() + ", '" + newOrder.getOrderTime() + "', " + newOrder.getMonth() + ", " +
+        // String sqlStatement = "INSERT INTO orders (order_id, time, day, month, year, total_price, tip, special_notes) VALUES (" +
+        //         newOrder.getOrderID() + ", '" + newOrder.getOrderTime() + "', " + newOrder.getDay() + ", " + newOrder.getMonth() + ", " +
+        //         newOrder.getTotalPrice() + ", " + newOrder.getTip() + ", '" + newOrder.getSpecialNotes() + "');";
+        String sqlStatement = "INSERT INTO orders (order_id, time, day, month, year, total_price, tip, special_notes) VALUES (" +
+                newOrder.getOrderID() + ", '" + newOrder.getOrderTime() + "', " + newOrder.getDay() + ", " + newOrder.getMonth() + ", " + newOrder.getYear() + ", " +
                 newOrder.getTotalPrice() + ", " + newOrder.getTip() + ", '" + newOrder.getSpecialNotes() + "');";
 
         runUpdate(sqlStatement);
 
+        for (Item i : currentOrderItems) {
+            String sizeEscaped = i.getSize().replace("'", "''"); //solely due to the "Bucee's" size (can we not use quotes in sql entries please)
+            String sqlStatement2 = "INSERT INTO items (item_id, order_id, product_id, size, sugar_level, ice_level, toppings, price) VALUES (" +
+                    i.getItemID() + ", " + i.getOrderID() + ", " + i.getProductID() + ", '" + sizeEscaped + "', '" +
+                    i.getSugarLevel() + "', '" + i.getIceLevel() + "', '" + i.getToppings() + "', " + i.getTotalPrice() + ");";
+            runUpdate(sqlStatement2);
+        }
+
         orderID += 1;
-        itemID = 1;
+        itemID += 1;
         orderSumArea.setText("");
         currentOrderItems.clear();
     }
