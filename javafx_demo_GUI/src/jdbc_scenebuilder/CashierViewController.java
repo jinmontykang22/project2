@@ -4,8 +4,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
-import jdbc_scenebuilder.ViewApp;
-import jdbc_scenebuilder.dbSetup;
 import javafx.event.ActionEvent;
 
 import java.sql.Connection;
@@ -115,7 +113,7 @@ public class CashierViewController {
 
     @FXML
     private void switchToManagerView(ActionEvent event) throws Exception {
-        ViewApp.changeScene("./resources/manager-view.fxml");
+        main.changeScene("./resources/manager-view.fxml");
     }
 
 

@@ -25,7 +25,7 @@ CREATE TABLE products(
 \copy products from './tables/products.csv' CSV HEADER
 
 CREATE TABLE inventory(
-    inv_item_id INT PRIMARY KEY,
+    inv_item_id SERIAL PRIMARY KEY,
     name TEXT, -- changed from 'name'
     units_remaining INT,
     numServings INT
@@ -36,8 +36,10 @@ CREATE TABLE inventory(
 
 CREATE TABLE orders (
     order_id        SERIAL PRIMARY KEY,
-    order_time      TIMESTAMP NOT NULL,
+    time            VARCHAR(255),
+    day             SMALLINT NOT NULL CHECK (day >= 1 AND day <= 31),
     month           SMALLINT NOT NULL CHECK (month >= 1 AND month <= 12),
+    year            INT NOT NULL CHECK (year >= 2020 AND year <= 2025),
     total_price     NUMERIC(10,2) NOT NULL,
     tip             NUMERIC(10,2) DEFAULT 0.00,
     special_notes   VARCHAR(255)
@@ -49,7 +51,6 @@ CREATE TABLE items (
     item_id SERIAL PRIMARY KEY,      
     order_id INT NOT NULL,           
     product_id INT NOT NULL,        
-    quantity INT NOT NULL CHECK (quantity > 0),
     size VARCHAR(20) NOT NULL CHECK (size IN ('Small','Medium','Large','Bucees_Large')),
     sugar_level VARCHAR(5) NOT NULL CHECK (sugar_level IN ('0','50','75','100')),
     ice_level VARCHAR(5) NOT NULL CHECK (ice_level IN ('0','50','75','100')),
@@ -73,6 +74,10 @@ CREATE TABLE staff(
 
 \copy staff from './tables/staff.csv' CSV HEADER
 
+SELECT setval(pg_get_serial_sequence('products', 'product_id'), COALESCE(MAX(product_id), 1)) FROM products;
+SELECT setval(pg_get_serial_sequence('inventory', 'inv_item_id'), COALESCE(MAX(inv_item_id), 1)) FROM inventory;
+SELECT setval(pg_get_serial_sequence('orders', 'order_id'), COALESCE(MAX(order_id), 1)) FROM orders;
+SELECT setval(pg_get_serial_sequence('items', 'item_id'), COALESCE(MAX(item_id), 1)) FROM items;
 
 -- ingredients (ing_id INT PKEY, ing_name TEXT, numServings INT),
 --     inventory (inv_item_id INT PKEY, name TEXT, units_remaining INT, numServings INT),

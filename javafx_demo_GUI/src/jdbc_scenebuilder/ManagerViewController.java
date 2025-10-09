@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import jdbc_scenebuilder.dbSetup;
 
 public class ManagerViewController {
 
@@ -37,6 +36,9 @@ public class ManagerViewController {
     @FXML
     private NumberAxis lineYAxis;
 
+    @FXML
+    private ComboBox<String> tableSelector;
+
 
     private static final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu/gang_52_db"; //database location
 
@@ -45,7 +47,7 @@ public class ManagerViewController {
 
     @FXML
     private void switchToCashierView(ActionEvent event) throws Exception {
-        ViewApp.changeScene("./resources/cashier-view.fxml");
+        main.changeScene("./resources/cashier-view.fxml");
     }
 
     // This method runs automatically when the FXML loads
@@ -54,9 +56,40 @@ public class ManagerViewController {
         // Set up what happens when button is clicked
         // switch_view.setOnAction(event -> runQuery("SELECT product_name FROM products"));
         // This needs to switch back to the login page.
+        tableSelector.getItems().addAll("Products", "Orders", "Inventory", "Staff", "Ingredients", "Items");
+        tableSelector.getSelectionModel().selectFirst();
         setMenu();
 
     }
+
+
+    @FXML
+    private void onTableSelected() {
+        String selected = tableSelector.getValue();
+        switch (selected) {
+            case "Products":
+                setMenu();
+                break;
+            case "Orders":
+                setOrders();
+                break;
+            case "Inventory":
+                setInventory();
+                break;
+            case "Staff":
+                setStaff();
+                break;
+            case "Ingredients":
+                setIngredients();
+                break;
+            case "Items":
+                setItems();
+                break;
+            default:
+                break;
+        }
+    }
+
     //Define an action whenever a new view is selected from the dropdown menu.
     @FXML
     public void setMenu() {
@@ -74,7 +107,7 @@ public class ManagerViewController {
     public void setOrders() {
         String csvResult = runQuery("SELECT * FROM orders");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
-        populateTableView(runQuery("SELECT * FROM orders LIMIT 100"));
+        populateTableView(runQuery("SELECT * FROM orders ORDER BY order_time DESC LIMIT 100"));
         numericColumn = "total_price";
         categoryColumn = "month";
         yAxisName = "Average Price/Order";
@@ -126,10 +159,10 @@ public class ManagerViewController {
         String csvResult = runQuery("SELECT * FROM inventory");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
         populateTableView(csvResult);
-        numericColumn = "order_id";
-        categoryColumn = "size";
-        yAxisName = "Items";
-        xAxisName = "Order";
+        numericColumn = "units_remaining";
+        categoryColumn = "name";
+        yAxisName = "Units Remaining";
+        xAxisName = "Item Name";
         populateBarChart(data);
     }
 
@@ -155,21 +188,22 @@ public class ManagerViewController {
     }
 
     @FXML
-    private void addItem() {
+    private void addProduct() {
         try {
+            setMenu();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-product.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Add Product");
             stage.setScene(new Scene(loader.load()));
             stage.showAndWait();  // wait until user closes the dialog
-            initialize();         // refresh the main table
+            setMenu();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void updateItem() {
+    private void updateProduct() {
         try {
             // Get selected row from table
             ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
@@ -197,11 +231,148 @@ public class ManagerViewController {
             );
 
             stage.showAndWait();
-            initialize(); // refresh table
+            setMenu();
 
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void addInventory() {
+        try {
+            setInventory();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-inventory.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Inventory");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait(); // Wait for user to finish
+            setInventory();        // Refresh main table
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void updateInventory() {
+        try {
+            // Get selected row from your inventory table (assuming it's called inventoryArea)
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an inventory item to update.").showAndWait();
+                return;
+            }
+
+            // Load the update-inventory.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-inventory.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Inventory");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected row data to controller
+            UpdateInventoryController controller = loader.getController();
+            controller.setInventoryData(
+                    Integer.parseInt(selectedRow.get(0)),  // inv_item_id
+                    selectedRow.get(1),                    // name
+                    Integer.parseInt(selectedRow.get(2)),  // units_remaining
+                    Integer.parseInt(selectedRow.get(3))   // numServings
+            );
+
+            stage.showAndWait();
+            setInventory();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void addEmployee() {
+        try {
+            setStaff();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/add-employee.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add Employee");
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait();   // Wait until the dialog closes
+            setStaff();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void updateEmployee() {
+        try {
+            // Get selected row from your staff table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an employee to update.").showAndWait();
+                return;
+            }
+
+            // Load FXML for the update window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./resources/update-employee.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Update Employee");
+            stage.setScene(new Scene(loader.load()));
+
+            // Pass selected employee data to the controller
+            UpdateEmployeeController controller = loader.getController();
+            controller.setEmployeeData(
+                    selectedRow.get(0),                      // staff_id
+                    selectedRow.get(1),                      // name
+                    selectedRow.get(2),                      // role
+                    Double.parseDouble(selectedRow.get(3)),  // salary
+                    Integer.parseInt(selectedRow.get(4))     // hours_worked
+            );
+
+            stage.showAndWait();
+            setStaff();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void removeEmployee() {
+        try {
+            // Get selected row from the staff table
+            ObservableList<String> selectedRow = tableArea.getSelectionModel().getSelectedItem();
+            if (selectedRow == null) {
+                new Alert(Alert.AlertType.WARNING, "Please select an employee to remove.").showAndWait();
+                return;
+            }
+
+            String staffId = selectedRow.get(0);
+            String staffName = selectedRow.get(1);
+
+            // Confirm deletion
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Confirm Delete");
+            confirm.setHeaderText("Delete Employee");
+            confirm.setContentText("Are you sure you want to remove " + staffName + " (ID: " + staffId + ")?");
+
+            // Wait for user response
+            if (confirm.showAndWait().get() == ButtonType.OK) {
+                String sql = String.format("DELETE FROM staff WHERE staff_id = '%s';", staffId);
+
+                ManagerViewController db = new ManagerViewController();
+                db.runQuery(sql);
+
+                new Alert(Alert.AlertType.INFORMATION, "Employee removed successfully.").showAndWait();
+                setStaff();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error removing employee: " + e.getMessage()).showAndWait();
         }
     }
 
@@ -245,11 +416,14 @@ public class ManagerViewController {
         for (Map<String, String> row : data) {
             String category = row.get(categoryColumn);
             String valueStr = row.get(numericColumn);
+            if (valueStr == null || valueStr.isEmpty() || valueStr.equalsIgnoreCase("none")) {
+                continue;
+            }
             try {
                 double value = Double.parseDouble(valueStr);
                 series.getData().add(new XYChart.Data<>(category, value));
             } catch (NumberFormatException e) {
-                System.err.println("Invalid number format for " + valueStr);
+                System.err.println("Invalid number format for value: " + valueStr);
             }
         }
         barChart.getData().add(series);
@@ -297,41 +471,36 @@ public class ManagerViewController {
         StringBuilder result = new StringBuilder();
 
         try {
-            // Load PostgreSQL driver
             Class.forName("org.postgresql.Driver");
+            try (Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd);
+                 Statement stmt = conn.createStatement()) {
 
-            // Establish connection
-            try (Connection conn = DriverManager.getConnection(DB_URL, my.user, my.pswd)) {
-                // Create statement
-                try (Statement stmt = conn.createStatement()) {
-                    // Execute query
+                // Detect query type
+                if (sqlStatement.trim().toLowerCase().startsWith("select")) {
                     try (ResultSet rs = stmt.executeQuery(sqlStatement)) {
-                        // Get metadata to retrieve column information
                         ResultSetMetaData metaData = rs.getMetaData();
                         int columnCount = metaData.getColumnCount();
 
-                        // Append column headers
+                        // Append headers
                         for (int i = 1; i <= columnCount; i++) {
                             result.append(metaData.getColumnName(i));
-                            if (i < columnCount) {
-                                result.append(",");
-                            }
+                            if (i < columnCount) result.append(",");
                         }
                         result.append("\n");
 
-                        // Append data rows
+                        // Append rows
                         while (rs.next()) {
                             for (int i = 1; i <= columnCount; i++) {
                                 String value = rs.getString(i);
-                                // Handle null values
                                 result.append(value != null ? value : "none");
-                                if (i < columnCount) {
-                                    result.append(",");
-                                }
+                                if (i < columnCount) result.append(",");
                             }
                             result.append("\n");
                         }
                     }
+                } else {
+                    int affectedRows = stmt.executeUpdate(sqlStatement);
+                    result.append("Rows affected: ").append(affectedRows);
                 }
             }
         } catch (ClassNotFoundException e) {
