@@ -107,7 +107,7 @@ public class ManagerViewController {
     public void setOrders() {
         String csvResult = runQuery("SELECT * FROM orders");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
-        populateTableView(runQuery("SELECT * FROM orders LIMIT 100"));
+        populateTableView(runQuery("SELECT * FROM orders ORDER BY order_time DESC LIMIT 100"));
         numericColumn = "total_price";
         categoryColumn = "month";
         yAxisName = "Average Price/Order";
@@ -196,7 +196,7 @@ public class ManagerViewController {
             stage.setTitle("Add Product");
             stage.setScene(new Scene(loader.load()));
             stage.showAndWait();  // wait until user closes the dialog
-            setItems();
+            setMenu();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,7 +231,7 @@ public class ManagerViewController {
             );
 
             stage.showAndWait();
-            setItems();
+            setMenu();
 
         } catch (Exception e) {
             e.printStackTrace();
