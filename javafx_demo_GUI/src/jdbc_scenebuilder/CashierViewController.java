@@ -20,8 +20,8 @@ public class CashierViewController {
     @FXML
     private Button queryButton; //match the fx:id value from Scene Builder
 
-    @FXML
-    private TextArea resultArea; //match the fx:id value from Scene Builder
+//    @FXML
+//    private TextArea resultArea; //match the fx:id value from Scene Builder
 
     @FXML
     private Button closeButton; //match the fx:id value from Scene Builder

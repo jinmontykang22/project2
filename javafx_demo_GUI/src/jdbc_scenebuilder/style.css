@@ -1,0 +1,10 @@
+#bottomhbox{
+    -fx-background-color: #a1a1a1;
+}
+#root{
+    -fx-background-color: #e8e8e8;
+}
+.productbutton{
+    -fx-background-color: #156082;
+    -fx-text-fill: #ffffff;
+}

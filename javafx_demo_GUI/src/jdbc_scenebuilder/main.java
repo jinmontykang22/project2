@@ -20,6 +20,7 @@ public class main extends Application {
                 "resources/cashier-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Boba Tea POS System");
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
@@ -27,6 +28,7 @@ public class main extends Application {
     public static void changeScene(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(main.class.getResource(fxml));
         Scene scene = new Scene(loader.load());
+        String css = main.class.getResource("style.css").toExternalForm();
         primaryStage.setScene(scene);
     }
 
