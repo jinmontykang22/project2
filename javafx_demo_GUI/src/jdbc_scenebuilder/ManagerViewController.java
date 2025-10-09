@@ -93,6 +93,7 @@ public class ManagerViewController {
     //Define an action whenever a new view is selected from the dropdown menu.
     @FXML
     public void setMenu() {
+        lineChart.setVisible(false);
         String csvResult = runQuery("SELECT * FROM products LIMIT 100");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
         populateTableView(csvResult);
@@ -105,9 +106,10 @@ public class ManagerViewController {
 
     @FXML
     public void setOrders() {
-        String csvResult = runQuery("SELECT * FROM orders");
+        lineChart.setVisible(true);
+        String csvResult = runQuery("SELECT * FROM orders limit 10000");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
-        populateTableView(runQuery("SELECT * FROM orders ORDER BY order_time DESC LIMIT 100"));
+        populateTableView(runQuery("SELECT * FROM orders LIMIT 1000"));
         numericColumn = "total_price";
         categoryColumn = "month";
         yAxisName = "Average Price/Order";
@@ -115,16 +117,19 @@ public class ManagerViewController {
         populateBarChart(data);
 
         // Take the last 1000 orders and display them on the line chart.
-//        csvResult = runQuery("SELECT * FROM orders ORDER BY order_time DESC LIMIT 1000");
-//        data = parseCsvToMap(csvResult);
-//        numericColumn = "order_id";
-//        categoryColumn = "day";
-//        yAxisName = "Number of Orders";
-//        xAxisName = "Days";
-//        populateLineChart(data);
+        csvResult = runQuery("SELECT day, COUNT(*) AS order_count FROM orders WHERE month = 9 GROUP BY day ORDER BY day");
+        data = parseCsvToMap(csvResult);
+        // This is calculating the average order number rather than the number of orders.
+        // A similar issue is probably happening with other graphs.
+        numericColumn = "order_count";
+        categoryColumn = "day";
+        yAxisName = "Number of Orders";
+        xAxisName = "Days";
+        populateLineChart(data);
     }
     @FXML
     public void setStaff() {
+        lineChart.setVisible(false);
         String csvResult = runQuery("SELECT * FROM staff");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
         populateTableView(csvResult);
@@ -137,12 +142,14 @@ public class ManagerViewController {
 
     @FXML
     public void setIngredients() {
+        lineChart.setVisible(false);
         barChart.getData().clear();
         populateTableView(runQuery("SELECT * FROM ingredients LIMIT 100"));
     }
 
     @FXML
     public void setItems() {
+        lineChart.setVisible(false);
         // Return the last 1000 items added to the order table.
         String csvResult = runQuery("SELECT * FROM items ORDER BY item_id DESC LIMIT 1000");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
@@ -156,6 +163,7 @@ public class ManagerViewController {
 
     @FXML
     public void setInventory() {
+        lineChart.setVisible(false);
         String csvResult = runQuery("SELECT * FROM inventory");
         List<Map<String, String>> data = parseCsvToMap(csvResult);
         populateTableView(csvResult);
@@ -382,8 +390,8 @@ public class ManagerViewController {
             return;
         }
 
-        xAxis.setLabel(xAxisName);
-        yAxis.setLabel(yAxisName);
+        lineXAxis.setLabel(xAxisName);
+        lineYAxis.setLabel(yAxisName);
 
         // Populate chart
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -391,11 +399,15 @@ public class ManagerViewController {
         for (Map<String, String> row : data) {
             String category = row.get(categoryColumn);
             String valueStr = row.get(numericColumn);
+            if (valueStr == null || valueStr.isEmpty()) {
+                System.err.println("Skipping null or empty value for " + category + " in column " + numericColumn);
+                continue;
+            }
             try {
                 double value = Double.parseDouble(valueStr);
                 series.getData().add(new XYChart.Data<>(category, value));
             } catch (NumberFormatException e) {
-                System.err.println("Invalid number format for " + valueStr);
+                System.err.println("Invalid number format for " + valueStr + " in column " + numericColumn);
             }
         }
         lineChart.getData().add(series);
