@@ -5,6 +5,6 @@ Database setup example
 Purpose: Keeping usernames and password private.
 */
 public final class dbSetup  {
-  public static final String user = "gang_52";
-  public static final String pswd = "miMima";
+  public static final String user = "NONE"; //changed spec for security
+  public static final String pswd = "NONE";
 }//end class
